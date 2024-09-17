@@ -1,77 +1,154 @@
+"use client";
+
+import * as React from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import DarkModeToggle from "./dark-mode-toggle";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { ChevronsUpDown } from "lucide-react";
+
+// import { cn } from "@/lib/utils";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  // CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export function LandingPage() {
+  const [open, setOpen] = React.useState(false);
+  // const [value, setValue] = React.useState("");
+
   const isLoggedIn = true;
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
-      <header className="px-4 lg:px-6 h-14 flex items-center">
-        <Link
-          href="#"
-          className="flex items-center justify-center"
-          prefetch={false}
-        >
-          <ShieldIcon className="h-6 w-6" />
-          <span className="sr-only">Secure Scan</span>
-        </Link>
-        <nav className="ml-auto flex gap-4 items-center sm:gap-6">
-          {!isLoggedIn && (
-            <>
-              <Link
-                href="#"
-                className="text-sm font-medium hover:underline underline-offset-4"
-                prefetch={false}
-              >
-                Features
-              </Link>
-              <Link
-                href="#"
-                className="text-sm font-medium hover:underline underline-offset-4"
-                prefetch={false}
-              >
-                Pricing
-              </Link>
-              <Link
-                href="#"
-                className="text-sm font-medium hover:underline underline-offset-4"
-                prefetch={false}
-              >
-                About
-              </Link>
-              <Link
-                href="#"
-                className="text-sm font-medium hover:underline underline-offset-4"
-                prefetch={false}
-              >
-                Contact
-              </Link>
-            </>
-          )}
-          <Link
-            href="#"
-            className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={false}
-          >
-            Register
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={false}
-          >
-            Sign in
-          </Link>
-          <DarkModeToggle />
-        </nav>
-      </header>
-
       {isLoggedIn && (
-        <div className="flex justify-center items-center">
-          <Button variant={"outline"} className="h-12">Go to dashboard</Button>
+        <div className="flex flex-col gap-2 justify-center items-center">
+          <Link href="#" prefetch={false}>
+            <Dialog>
+              <DialogTrigger className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 w-36">
+                Add product
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add Products</DialogTitle>
+                  <DialogDescription>
+                    Add products to your dashboard to start scanning for
+                    vulnerabilities.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <label className="block text-sm font-medium text-muted-foreground">
+                  Vendor name
+                </label>
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-full justify-between"
+                    >
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Search Vendor Name" />
+                      <CommandList>
+                        <CommandEmpty>No vendor name found.</CommandEmpty>
+                        <CommandGroup></CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
+                <label className="block text-sm font-medium text-muted-foreground">
+                  Product name
+                </label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-full justify-between"
+                    >
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Search Product Name" />
+                      <CommandList>
+                        <CommandEmpty>No product name found.</CommandEmpty>
+                        <CommandGroup></CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
+                <label className="block text-sm font-medium text-muted-foreground">
+                  Version
+                </label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-full justify-between"
+                    >
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Search Version" />
+                      <CommandList>
+                        <CommandEmpty>No version found.</CommandEmpty>
+                        <CommandGroup></CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <div className="flex justify-between gap-2">
+                  <Button className="w-max flex gap-1 items-center justify-center">
+                    <h1>Done</h1>
+                  </Button>
+                  <Button
+                    variant={"outline"}
+                    className="w-max flex gap-1 items-center justify-center"
+                  >
+                    <h1>Add another</h1>
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </Link>
+          <Link href="/dashboard" prefetch={false}>
+            <Button variant={"outline"} className="w-36">
+              Go to dashboard
+            </Button>
+          </Link>
         </div>
       )}
 
@@ -315,31 +392,5 @@ export function LandingPage() {
         </>
       )}
     </div>
-  );
-}
-
-interface ShieldIconProps {
-  className?: string;
-  width?: number;
-  height?: number;
-}
-
-function ShieldIcon(props: ShieldIconProps) {
-  const { className, width = 24, height = 24 } = props;
-  return (
-    <svg
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-    </svg>
   );
 }
