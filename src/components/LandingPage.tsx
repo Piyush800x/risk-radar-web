@@ -130,16 +130,18 @@ export function LandingPage() {
                     </Command>
                   </PopoverContent>
                 </Popover>
-                <div className="flex justify-between gap-2">
-                  <Button className="w-max flex gap-1 items-center justify-center">
-                    <h1>Done</h1>
-                  </Button>
-                  <Button
-                    variant={"outline"}
-                    className="w-max flex gap-1 items-center justify-center"
-                  >
-                    <h1>Add another</h1>
-                  </Button>
+                <div className="flex justify-end gap-2">
+                  <div className="flex gap-2">
+                    <Button
+                      variant={"outline"}
+                      className="w-max flex gap-1 items-center justify-center"
+                    >
+                      <h1>Clear</h1>
+                    </Button>
+                    <Button className="w-max flex gap-1 items-center justify-center">
+                      <h1>Add</h1>
+                    </Button>
+                  </div>
                 </div>
               </DialogContent>
             </Dialog>
