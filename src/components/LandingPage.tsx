@@ -1,5 +1,6 @@
 "use client";
 
+import {useKindeBrowserClient} from "@kinde-oss/kinde-auth-nextjs";
 import * as React from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -32,6 +33,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
+
 const frameworks = [
   {
     value: "next.js",
@@ -56,6 +58,7 @@ const frameworks = [
 ];
 
 export function LandingPage() {
+  const {isAuthenticated} = useKindeBrowserClient();
   const [open, setOpen] = React.useState(false);
   const [vendorValue, setVendorValue] = React.useState("");
   const [versionValue, setVersionValue] = React.useState("");
@@ -71,11 +74,9 @@ export function LandingPage() {
     setProductValue("");
   }
 
-  const isLoggedIn = true;
-
   return (
     <div className="flex flex-col min-h-[100dvh]">
-      {isLoggedIn && (
+      {isAuthenticated && (
         <div className="flex flex-col gap-2 justify-center items-center">
           <Link href="#" prefetch={false}>
             <Dialog>
@@ -284,7 +285,7 @@ export function LandingPage() {
         </div>
       )}
 
-      {!isLoggedIn && (
+      {!isAuthenticated && (
         <>
           <main className="flex-1">
             <section className="w-full py-12 md:py-24 lg:py-32 xl:py-12">
