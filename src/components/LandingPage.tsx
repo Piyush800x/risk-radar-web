@@ -15,15 +15,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, Check } from "lucide-react";
 
-// import { cn } from "@/lib/utils";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  // CommandItem,
+  CommandItem,
   CommandList,
 } from "@/components/ui/command";
 import {
@@ -31,10 +30,46 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+
+const frameworks = [
+  {
+    value: "next.js",
+    label: "Next.js",
+  },
+  {
+    value: "sveltekit",
+    label: "SvelteKit",
+  },
+  {
+    value: "nuxt.js",
+    label: "Nuxt.js",
+  },
+  {
+    value: "remix",
+    label: "Remix",
+  },
+  {
+    value: "astro",
+    label: "Astro",
+  },
+];
 
 export function LandingPage() {
   const [open, setOpen] = React.useState(false);
-  // const [value, setValue] = React.useState("");
+  const [vendorValue, setVendorValue] = React.useState("");
+  const [versionValue, setVersionValue] = React.useState("");
+  const [productValue, setProductValue] = React.useState("");
+
+  const handleAddClick = () => {
+    console.log(vendorValue, versionValue, productValue);
+  };
+
+  const handleClearClick = () => {
+    setVendorValue("");
+    setVersionValue("");
+    setProductValue("");
+  }
 
   const isLoggedIn = true;
 
@@ -67,6 +102,11 @@ export function LandingPage() {
                       aria-expanded={open}
                       className="w-full justify-between"
                     >
+                      {vendorValue
+                        ? frameworks.find(
+                            (framework) => framework.value === vendorValue
+                          )?.label
+                        : "Select framework..."}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
@@ -75,32 +115,32 @@ export function LandingPage() {
                       <CommandInput placeholder="Search Vendor Name" />
                       <CommandList>
                         <CommandEmpty>No vendor name found.</CommandEmpty>
-                        <CommandGroup></CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-
-                <label className="block text-sm font-medium text-muted-foreground">
-                  Product name
-                </label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="w-full justify-between"
-                    >
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
-                    <Command>
-                      <CommandInput placeholder="Search Product Name" />
-                      <CommandList>
-                        <CommandEmpty>No product name found.</CommandEmpty>
-                        <CommandGroup></CommandGroup>
+                        <CommandGroup>
+                          {frameworks.map((framework) => (
+                            <CommandItem
+                              key={framework.value}
+                              value={framework.value}
+                              onSelect={(currentValue) => {
+                                setVendorValue(
+                                  currentValue === vendorValue
+                                    ? ""
+                                    : currentValue
+                                );
+                                setOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  vendorValue === framework.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {framework.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
                       </CommandList>
                     </Command>
                   </PopoverContent>
@@ -117,6 +157,11 @@ export function LandingPage() {
                       aria-expanded={open}
                       className="w-full justify-between"
                     >
+                      {versionValue
+                        ? frameworks.find(
+                            (framework) => framework.value === versionValue
+                          )?.label
+                        : "Select framework..."}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </PopoverTrigger>
@@ -125,20 +170,105 @@ export function LandingPage() {
                       <CommandInput placeholder="Search Version" />
                       <CommandList>
                         <CommandEmpty>No version found.</CommandEmpty>
-                        <CommandGroup></CommandGroup>
+                        <CommandGroup>
+                          {frameworks.map((framework) => (
+                            <CommandItem
+                              key={framework.value}
+                              value={framework.value}
+                              onSelect={(currentValue) => {
+                                setVersionValue(
+                                  currentValue === versionValue
+                                    ? ""
+                                    : currentValue
+                                );
+                                setOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  versionValue === framework.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {framework.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
                       </CommandList>
                     </Command>
                   </PopoverContent>
                 </Popover>
+
+                <label className="block text-sm font-medium text-muted-foreground">
+                  Product Name
+                </label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-full justify-between"
+                    >
+                      {productValue
+                        ? frameworks.find(
+                            (framework) => framework.value === productValue
+                          )?.label
+                        : "Select framework..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Search product name" />
+                      <CommandList>
+                        <CommandEmpty>No product name found.</CommandEmpty>
+                        <CommandGroup>
+                          {frameworks.map((framework) => (
+                            <CommandItem
+                              key={framework.value}
+                              value={framework.value}
+                              onSelect={(currentValue) => {
+                                setProductValue(
+                                  currentValue === productValue
+                                    ? ""
+                                    : currentValue
+                                );
+                                setOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  productValue === framework.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {framework.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
                 <div className="flex justify-end gap-2">
                   <div className="flex gap-2">
                     <Button
+                    onClick={handleClearClick}
                       variant={"outline"}
-                      className="w-max flex gap-1 items-center justify-center"
+                      className="flex gap-1 items-center justify-center"
                     >
                       <h1>Clear</h1>
                     </Button>
-                    <Button className="w-max flex gap-1 items-center justify-center">
+                    <Button
+                      onClick={handleAddClick}
+                      className="w-max flex gap-1 items-center justify-center"
+                    >
                       <h1>Add</h1>
                     </Button>
                   </div>
