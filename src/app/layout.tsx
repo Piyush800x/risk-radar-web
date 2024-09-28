@@ -16,7 +16,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: "Risk Radar",
-  description: "Generated for the tech geeks.",
+  description: "Sophisticated vulnerabilities detection and alerting software",
 };
 
 export default function RootLayout({
