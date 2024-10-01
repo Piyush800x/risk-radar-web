@@ -1,12 +1,5 @@
-import { Bug } from "lucide-react";
-import { Info } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import Image from "next/image";
+import { Button } from "./ui/button";
 
 export default function ProductCard() {
   const products = [
@@ -27,34 +20,40 @@ export default function ProductCard() {
   return (
     <>
       {products.map((product) => (
-        <div key={product.id} className="flex flex-col gap-4 border rounded-md p-4 w-max max-w-2/5">
-          <div>
-            <h1 className="text-xl font-bold">{product.name}</h1>
-            <p>{product.description}</p>
+        <div
+          key={product.id}
+          className="flex flex-col gap-14 p-4 bg-[#F4F4F4] dark:bg-[#2D2D2D] rounded-lg border border-[#BCBCBC] dark:border-[#434343] w-full max-w-2/5 transition-transform transform hover:scale-105 hover:shadow-lg"
+        >
+          <div className="flex justify-between gap-16">
+            <div>
+              <h1 className="text-xl font-semibold max-w-30">Mircrosoft Edge</h1>
+              <h1 className="">128.0.21451.8</h1>
+            </div>
+
+            <div className="font-semibold">
+              <h1 className="flex gap-1">
+                <Image
+                  src={"/red_ellipse.svg"}
+                  height={20}
+                  width={20}
+                  alt="red_ellipse"
+                />
+                Critical: 15
+              </h1>
+              <h1 className="flex gap-1">
+                <Image
+                  src={"/yellow_ellipse.svg"}
+                  height={20}
+                  width={20}
+                  alt="yellow_ellipse"
+                />
+                High: 15
+              </h1>
+            </div>
           </div>
 
-          <div className="flex justify-between">
-            <div className="flex items-center gap-2">
-              <Bug className="" />
-              <p className="font-bold">{product.vulnerabilities}</p>
-            </div>
-            <HoverCard>
-              <HoverCardTrigger>
-                <Info className="cursor-pointer" />
-              </HoverCardTrigger>
-              <HoverCardContent>
-                <div className="flex flex-col gap-2">
-                  {product.severityLevels.map((level) => (
-                    <Badge key={level.level} variant="outline">
-                      <div className="flex justify-between w-full">
-                        <h1>{level.level}</h1>
-                        <h1>{level.count}</h1>
-                      </div>
-                    </Badge>
-                  ))}
-                </div>
-              </HoverCardContent>
-            </HoverCard>
+          <div className="w-full flex justify-end">
+            <Button className="">View Details</Button>
           </div>
         </div>
       ))}

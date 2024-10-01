@@ -15,13 +15,15 @@ export default function Dashboard() {
       <NavBar />
 
       {isAuthenticated ? (
-        <div className="grid sm:grid-cols-4 gap-2 px-4 py-2">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+        <div className="px-4 py-2">
+          <div className="grid sm:grid-cols-4 gap-4 w-full">
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+          </div>
         </div>
       ) : (
         redirect("/")

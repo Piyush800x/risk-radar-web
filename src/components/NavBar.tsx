@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import DarkModeToggle from "./dark-mode-toggle";
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Shield } from "lucide-react";
 import {
   RegisterLink,
   LoginLink,
@@ -20,7 +20,7 @@ export default function NavBar() {
         className="flex items-center justify-center"
         prefetch={false}
       >
-        <ShieldCheck className="h-6 w-6" />
+        {isAuthenticated ? <ShieldCheck className="h-6 w-6" /> : <Shield className="h-6 w-6"/>}
       </Link>
       <nav className="ml-auto flex gap-4 items-center sm:gap-6">
         {!isAuthenticated && (
