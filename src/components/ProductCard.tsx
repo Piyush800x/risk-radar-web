@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 export default function ProductCard() {
   const products = [
@@ -26,7 +27,9 @@ export default function ProductCard() {
         >
           <div className="flex justify-between gap-16">
             <div>
-              <h1 className="text-xl font-semibold max-w-30">Mircrosoft Edge</h1>
+              <h1 className="text-xl font-semibold max-w-30">
+                Mircrosoft Edge
+              </h1>
               <h1 className="">128.0.21451.8</h1>
             </div>
 
@@ -53,7 +56,13 @@ export default function ProductCard() {
           </div>
 
           <div className="w-full flex justify-end">
-            <Button className="">View Details</Button>
+            <Link
+              href={
+                "/dashboard/view-details?product=google%20chrome&version=91"
+              }
+            >
+              <Button>View Details</Button>
+            </Link>
           </div>
         </div>
       ))}
