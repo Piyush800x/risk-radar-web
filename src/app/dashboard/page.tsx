@@ -19,10 +19,10 @@ export default function Dashboard() {
       {isAuthenticated ? (
         <div className="flex flex-col gap-4">
           <div className="w-1/4 flex items-center">
-            <Search className="mr-2" />
-            <Input placeholder="Search by product name" />
+            <Search className="left-6 absolute size-5" />
+            <Input placeholder="Search by product name" className="px-9"/>
           </div>
-          <div className="grid sm:grid-cols-4 gap-4 w-full">
+          <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 gap-4 w-full">
             <ProductCard />
             <ProductCard />
             <ProductCard />
