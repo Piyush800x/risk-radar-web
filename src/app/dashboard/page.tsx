@@ -1,11 +1,11 @@
 "use client";
 
-import NavBar from "@/components/NavBar";
 import ProductCard from "@/components/productCard";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { redirect } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import SideBar from "@/components/SideBar";
 
 export default function Dashboard() {
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
@@ -14,11 +14,11 @@ export default function Dashboard() {
 
   return (
     <>
-      <NavBar />
 
       {isAuthenticated ? (
         <div className="flex flex-col gap-4">
-          <div className="w-1/4 flex items-center">
+          <SideBar/>
+          {/* <div className="w-1/4 flex items-center">
             <Search className="left-6 absolute size-5" />
             <Input placeholder="Search by product name" className="px-9"/>
           </div>
@@ -29,7 +29,7 @@ export default function Dashboard() {
             <ProductCard />
             <ProductCard />
             <ProductCard />
-          </div>
+          </div> */}
         </div>
       ) : (
         redirect("/")
