@@ -35,6 +35,8 @@ import {
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import AddProduct from "./AddProduct";
+import AddProduct2 from "./AddProduct2";
+import AddProduct3 from "./AddProduct3";
 
 
 const frameworks = [
@@ -286,7 +288,8 @@ export function LandingPage() {
         //     </Button>
         //   </Link>
         // </div>
-        <AddProduct/>
+        // <AddProduct/>
+        <AddProduct3/>
       )}
 
       {!isAuthenticated && (

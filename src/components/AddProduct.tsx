@@ -117,8 +117,8 @@ export default function AddProduct() {
                           key={vendor}
                           value={vendor}
                           onSelect={(currentValue) => {
-                            setVendorValue(
-                              currentValue === vendorValue ? "" : currentValue
+                            setVendorName(
+                              currentValue
                             );
                             setOpen(false);
                           }}
@@ -167,8 +167,8 @@ export default function AddProduct() {
                           key={product}
                           value={product}
                           onSelect={(currentProductValue) => {
-                            setProductValue(
-                                currentProductValue === productValue ? "" : currentProductValue
+                            setProductName(
+                                currentProductValue
                             );
                             setOpen(false);
                           }}

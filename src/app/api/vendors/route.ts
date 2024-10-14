@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   try {
     const client: MongoClient = await mongoClientPromise;
     const db: Db = client.db("risk-radar");
-    const collection: Collection = db.collection("vendors_prod");
+    const collection: Collection = db.collection("vendors_prod_final");
 
     const vendors = await collection.distinct('vendorName')
     
