@@ -8,7 +8,7 @@ export async function GET(req: NextRequest, { params }: any) {
   try {
     const client: MongoClient = await mongoClientPromise;
     const db: Db = client.db("risk-radar");
-    const collection: Collection = db.collection("vendors_prod_final");
+    const collection: Collection = db.collection("scrapped_data_v1");
 
     // Find the product under the selected vendor
     const vendor = await collection.findOne({ vendorName });
