@@ -1,11 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
 
+interface VendorProductData {
+  _id: string; // Assuming this will be a string when returned from MongoDB
+  vendorName: string;
+  Products: {
+    [productName: string]: string[]; // Each key in Products is a product name, and the value is an array of strings
+  };
+}
+
 export default function AddProduct3() {
   const [vendorName, setVendorName] = useState("");
   const [productName, setProductName] = useState("");
   const [vendors, setVendors] = useState<string[]>([]);
-  const [filteredVendors, setFilteredVendors] = useState<string[]>([]);
+  const [filteredVendors, setFilteredVendors] = useState<VendorProductData[]>([]);
   const [products, setProducts] = useState<string[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<string[]>([]);
   const [versions, setVersions] = useState<string[]>([]);
@@ -15,15 +23,41 @@ export default function AddProduct3() {
   const [productSearch, setProductSearch] = useState("");
   const [versionSearch, setVersionSearch] = useState("");
 
-  // Fetch vendors on component mount
+  const [debouncedVendorSearch, setDebouncedVendorSearch] = useState(vendorSearch);
+
+  // Function to fetch vendors based on the vendor search query
+  const fetchData = async () => {
+    const res = await fetch("/api/vendors", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Metadata": JSON.stringify(debouncedVendorSearch),
+      },
+    });
+    const data = await res.json();
+    setVendors(data.data || []);
+    setFilteredVendors(data.data || []); // Initialize filtered vendors
+  };
+
+
+  // Debounce effect: Update debounced search value after 500ms of no typing
   useEffect(() => {
-    fetch("/api/vendors")
-      .then((response) => response.json())
-      .then((data) => {
-        setVendors(data.data);
-        setFilteredVendors(data.data); // Initialize filtered vendors
-      });
-  }, []);
+    const handler = setTimeout(() => {
+      setDebouncedVendorSearch(vendorSearch);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler); // Clear timeout if vendorSearch changes again
+    };
+  }, [vendorSearch]);
+
+  // Fetch vendors when debounced search changes
+  useEffect(() => {
+    if (debouncedVendorSearch) {
+      fetchData();
+    }
+  }, [debouncedVendorSearch]);
+
 
   // Fetch products when vendor is selected
   useEffect(() => {
@@ -50,14 +84,14 @@ export default function AddProduct3() {
     }
   }, [vendorName, productName]);
 
-  // Handle vendor search
-  useEffect(() => {
-    setFilteredVendors(
-      vendors.filter((vendor) =>
-        vendor.toLowerCase().includes(vendorSearch.toLowerCase())
-      )
-    );
-  }, [vendorSearch, vendors]);
+
+  // useEffect(() => {
+  //     setFilteredVendors(
+  //       vendors.filter((vendor) =>
+  //         vendor.toLowerCase().includes(vendorSearch.toLowerCase())
+  //       )
+  //   );
+  // }, [vendorSearch, vendors]);
 
   // Handle product search
   useEffect(() => {
@@ -113,8 +147,8 @@ export default function AddProduct3() {
           >
             <option value="">Select Vendor</option>
             {filteredVendors.map((vendor) => (
-              <option key={vendor} value={vendor}>
-                {vendor}
+              <option key={vendor._id} value={vendor.vendorName}>
+                {vendor.vendorName}
               </option>
             ))}
           </select>
