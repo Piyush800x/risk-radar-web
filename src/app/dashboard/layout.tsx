@@ -1,20 +1,34 @@
+"use client"
+
+import NavBar from "@/components/NavBar";
+import SideBar from "@/components/SideBar";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { redirect } from "next/navigation";
+
 export default function DashboardLayout({
   children,
-  billing,
-  home,
-  notifications,
-  settings,
 }: {
   children: React.ReactNode;
-  billing: React.ReactNode;
-  home: React.ReactNode;
-  notifications: React.ReactNode;
-  settings: React.ReactNode;
-}){
-    return (
-        <div className="flex">
-            <div>{children}</div>
-            <div>{home}</div>
-        </div>
-    )
-};
+}) {
+  const { isAuthenticated, isLoading } = useKindeBrowserClient();
+
+  if (isLoading) return <div>Loading...</div>;
+
+  return (
+    <>
+      {isAuthenticated ? (
+        <>
+          <NavBar />
+          <div className="flex">
+            <div className="flex">
+              <SideBar />
+              {children}
+            </div>
+          </div>
+        </>
+      ) : (
+        redirect("/")
+      )}
+    </>
+  );
+}

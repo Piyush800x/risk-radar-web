@@ -5,7 +5,6 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { redirect } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import SideBar from "@/components/SideBar";
 
 export default function Dashboard() {
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
@@ -17,7 +16,7 @@ export default function Dashboard() {
 
       {isAuthenticated ? (
         <div className="flex flex-col gap-4">
-          <SideBar/>
+          {/* <SideBar /> */}
           {/* <div className="w-1/4 flex items-center">
             <Search className="left-6 absolute size-5" />
             <Input placeholder="Search by product name" className="px-9"/>
