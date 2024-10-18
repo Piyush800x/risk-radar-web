@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Sophisticated vulnerabilities detection and alerting software",
 };
 
-const poppins = Poppins({ subsets: ["latin"], weight: "500" });
+const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 
 export default function RootLayout({
   children,

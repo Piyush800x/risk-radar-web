@@ -111,9 +111,24 @@ export default function AddProduct3() {
     );
   }, [versionSearch, versions]);
 
-  return (
-    <div className="p-4">
-      <form className="space-y-4">
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const openPopup = () => setIsPopupOpen(true);
+  const closePopup = () => setIsPopupOpen(false);
+
+  interface PopupProps {
+    isOpen: boolean;
+    onClose: () => void;
+  }
+
+  const Popup: React.FC<PopupProps> = ({ isOpen, onClose }) => {
+    if (!isOpen) return null;
+  
+    return (
+      <div className="fixed inset-0 w-full flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm">
+          
+        <form className="space-y-4">
         {/* Vendor Dropdown with Search */}
         <div>
           <label htmlFor="vendorName">Vendor Name</label>
@@ -192,6 +207,32 @@ export default function AddProduct3() {
           Add
         </button>
       </form>
+          <button 
+            onClick={onClose}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="p-4">
+      
+      <div className="flex items-center justify-center">
+      <button 
+        onClick={openPopup} 
+        className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+      >
+        Add products
+      </button>
+
+      <Popup isOpen={isPopupOpen} onClose={closePopup} />
+    </div>
+
+      
     </div>
   );
 }
