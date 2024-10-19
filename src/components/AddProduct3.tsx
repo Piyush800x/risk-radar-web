@@ -146,7 +146,7 @@ export default function AddProduct3() {
       <div className="">
         <div className="space-y-4">
           {/* Vendor Dropdown with Search */}
-          <div>
+          <div className="w-full">
             <label htmlFor="vendorName">Vendor Name</label>
             <input
               type="text"
