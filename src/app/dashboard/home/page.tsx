@@ -1,7 +1,7 @@
 "use client";
 
 import AddProduct3 from "@/components/AddProduct3";
-import ProductCard from "@/components/productCard";
+import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";

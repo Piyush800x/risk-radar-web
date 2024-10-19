@@ -21,6 +21,7 @@ export default function AddProduct3() {
   const [filteredProducts, setFilteredProducts] = useState<string[]>([]);
   const [versions, setVersions] = useState<string[]>([]);
   const [filteredVersions, setFilteredVersions] = useState<string[]>([]);
+  const [selectedVersion, setSelectedVersion] = useState<string>("");
 
   const [vendorSearch, setVendorSearch] = useState("");
   const [productSearch, setProductSearch] = useState("");
@@ -112,11 +113,38 @@ export default function AddProduct3() {
     );
   }, [versionSearch, versions]);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const productData = {
+      vendorName,
+      productName,
+      selectedVersion
+    }
+
+    // const response = await fetch('/api/add-product', {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(productData)
+    // });
+
+    // const result = await response.json();
+    // if (result.success) {
+    //   // Product added popup
+    // }
+    // else {
+    //   // failed popup
+    // }
+    console.log(`Products: ${productData}`)
+  }
+
   return (
     
     <div className="w-full flex justify-center items-center">
       <div className="">
-        <form className="space-y-4">
+        <div className="space-y-4">
           {/* Vendor Dropdown with Search */}
           <div>
             <label htmlFor="vendorName">Vendor Name</label>
@@ -180,7 +208,7 @@ export default function AddProduct3() {
                 onChange={(e) => setVersionSearch(e.target.value)}
                 className="border p-2 mb-2 w-full rounded-md"
               />
-              <select id="version" className="border p-2 w-full rounded-md">
+              <select id="version" className="border p-2 w-full rounded-md" onChange={(e) => setSelectedVersion(e.target.value)}>
                 <option value="">Select Version</option>
                 {filteredVersions.map((version, index) => (
                   <option key={index} value={version}>
@@ -191,10 +219,10 @@ export default function AddProduct3() {
             </div>
           )}
 
-          <Button type="submit" className="">
+          <Button type="submit" className="" onClick={() => handleSubmit}>
             Add
           </Button>
-        </form>
+        </div>
       </div>
     </div>
   );

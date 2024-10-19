@@ -1,6 +1,6 @@
 "use client";
 
-import ProductCard from "@/components/productCard";
+import ProductCard from "@/components/ProductCard";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { redirect } from "next/navigation";
 import { Input } from "@/components/ui/input";
