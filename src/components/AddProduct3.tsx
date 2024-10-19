@@ -115,10 +115,10 @@ export default function AddProduct3() {
   return (
     
     <div className="w-full flex justify-center items-center">
-      <div className="">
+      <div className="w-full">
         <form className="space-y-4">
           {/* Vendor Dropdown with Search */}
-          <div>
+          <div className="w-full">
             <label htmlFor="vendorName">Vendor Name</label>
             <input
               type="text"
