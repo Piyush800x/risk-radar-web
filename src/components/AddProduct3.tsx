@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 interface VendorProductData {
   _id: string; // Assuming this will be a string when returned from MongoDB
@@ -29,6 +31,8 @@ export default function AddProduct3() {
 
   const [debouncedVendorSearch, setDebouncedVendorSearch] =
     useState(vendorSearch);
+
+  const {isAuthenticated, user} = useKindeBrowserClient();
 
   // Function to fetch vendors based on the vendor search query
   const fetchData = async () => {
@@ -113,31 +117,33 @@ export default function AddProduct3() {
     );
   }, [versionSearch, versions]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     const productData = {
+      authId: user?.id,
+      authEmailId: user?.email,
+      userFirstName: user?.given_name,
+      userLastName: user?.family_name,
       vendorName,
       productName,
       selectedVersion
     }
 
-    // const response = await fetch('/api/add-product', {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(productData)
-    // });
+    const response = await fetch('/api/add-product', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(productData)
+    });
 
-    // const result = await response.json();
-    // if (result.success) {
-    //   // Product added popup
-    // }
-    // else {
-    //   // failed popup
-    // }
-    console.log(`Products: ${productData}`)
+    const result = await response.json();
+    if (result.success) {
+      toast.success("Product added successfully.")
+    }
+    else {
+      toast.error("Couldn't add product.\nPlaese try again!")
+    }
+    console.log(`Products: ${JSON.stringify(productData)}`)
   }
 
   return (
@@ -219,7 +225,7 @@ export default function AddProduct3() {
             </div>
           )}
 
-          <Button type="submit" className="" onClick={() => handleSubmit}>
+          <Button className="" onClick={handleSubmit}>
             Add
           </Button>
         </div>
