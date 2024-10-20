@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import NavBar from "@/components/NavBar";
 import SideBar from "@/components/SideBar";
@@ -19,11 +19,9 @@ export default function DashboardLayout({
       {isAuthenticated ? (
         <>
           <NavBar />
-          <div className="flex">
-            <div className="flex">
-              <SideBar />
-              {children}
-            </div>
+          <div className="flex w-full">
+            <SideBar />
+            <div className="w-full">{children}</div>
           </div>
         </>
       ) : (

@@ -29,7 +29,7 @@ export default function SideBar() {
   }
 
   return (
-    <div className="bg-stone-100 dark:bg-stone-100/10 flex flex-col justify-between w-max h-dvh drop-shadow-md ">
+    <div className="bg-stone-100 dark:bg-stone-100/10 flex flex-col justify-between w-max h-dvh drop-shadow-md">
       {/* Logo and heading with Sidebar menu items */}
       <div>
         <Image
@@ -192,7 +192,7 @@ export default function SideBar() {
       </div>
 
       {/* System Status */}
-      <div className="mx-2 my-2 pt-1 flex gap-2 items-center border-t border-stone-300">
+      <div className="mx-2 my-3 pt-2 w-max flex gap-2 items-center border-t border-stone-300">
         <div>
           <Image
             src={"/green_tick_icon.svg"}
@@ -202,8 +202,8 @@ export default function SideBar() {
           />
         </div>
         <div>
-          <h1 className="font-semibold">Status: All Systems Operational</h1>
-          <h1 className="text-sm">
+          <h1 className="font-semibold text-sm">Status: All Systems Operational</h1>
+          <h1 className="text-xs">
             Last Updated:{" "}
             {new Date().toLocaleString("en-US", {
               timeZone: "Asia/Kolkata",
