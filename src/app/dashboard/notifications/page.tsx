@@ -1,8 +1,26 @@
+import NotificationCard from "@/components/NotificationCard";
+
 export default function Notifications() {
-    return (
-      <>
-        <h1>Notifications</h1>
-      </>
-    );
-  }
-  
+  return (
+    <div className="py-4 px-5 flex flex-col">
+      {/* Titles and stuffs */}
+      <h1 className="text-neutral-600 text-lg font-semibold dark:invert">
+        Notifications
+      </h1>
+      <div className="mt-6 dark:invert">
+        <span className="text-neutral-900 text-3xl font-extrabold tracking-wide">
+          Welcome,
+          <br />
+        </span>
+        <span className="text-neutral-700 text-lg font-medium tracking-wide">
+          See all your notifications here
+        </span>
+      </div>
+
+      {/* Notification bars */}
+      <div className="m-2 grid grid-cols-1 w-full">
+        <NotificationCard title="new heading" description="new desc" time="15:12"/>
+      </div>
+    </div>
+  );
+}
