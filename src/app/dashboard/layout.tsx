@@ -1,9 +1,10 @@
 "use client";
 
 import NavBar from "@/components/NavBar";
-import SideBar from "@/components/SideBar";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { redirect } from "next/navigation";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
 export default function DashboardLayout({
   children,
@@ -16,17 +17,23 @@ export default function DashboardLayout({
 
   return (
     <>
-      {isAuthenticated ? (
-        <>
-          <NavBar />
-          <div className="flex w-full">
-            <SideBar />
-            <div className="w-full">{children}</div>
-          </div>
-        </>
-      ) : (
-        redirect("/")
-      )}
+      <NavBar />
+      <SidebarProvider>
+        <AppSidebar />
+        {isAuthenticated ? (
+          <>
+            <div className="flex w-full">
+              {/* <SideBar /> */}
+              <div className="w-full">
+                <SidebarTrigger className="fixed bottom-1/2 z-99"/>
+                {children}
+              </div>
+            </div>
+          </>
+        ) : (
+          redirect("/")
+        )}
+      </SidebarProvider>
     </>
   );
 }

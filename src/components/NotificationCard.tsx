@@ -12,25 +12,25 @@ export default function NotificationCard({
   time,
 }: notificationDetails) {
   return (
-    <div className="flex">
-      <div className="flex justify-between bg-stone-50 rounded-tl-lg rounded-bl-lg border px-2 py-1 border-stone-300 w-full">
+    <div className="flex ">
+      <div className="flex bg-[#F4F4F4] dark:bg-[#2D2D2D] rounded-l-lg border border-[#BCBCBC] dark:border-[#434343] justify-between rounded-tl-lg rounded-bl-lg  px-2 py-1  w-full">
         <div>
-          <h1 className="text-zinc-800 text-xl font-semibold">{title}</h1>
+          <h1 className="text-xl font-semibold">{title}</h1>
           <h1>{description}</h1>
         </div>
         <div>
           <h1>{time}</h1>
         </div>
       </div>
-    <div className="flex flex-col items-center justify-center cursor-pointer px-3 bg-stone-50 rounded-tr-lg rounded-br-lg border border-stone-300 transition-all duration-300 hover:bg-red-500 group">
-      <Image
-        src="/delete_icon.svg"
-        width={20}
-        height={20}
-        alt="delete icon"
-        className="group-hover:invert"
-      />
-    </div>
+      <div className="flex flex-col items-center justify-center cursor-pointer px-3 bg-[#F4F4F4] dark:bg-[#2D2D2D] rounded-r-lg border border-[#BCBCBC] dark:border-[#434343] transition-all duration-300 hover:bg-red-500 dark:hover:bg-red-500 group">
+        <Image
+          src="/delete_icon.svg"
+          width={20}
+          height={20}
+          alt="delete icon"
+          className="group-hover:invert dark:invert"
+        />
+      </div>
     </div>
   );
 }

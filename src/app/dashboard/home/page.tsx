@@ -3,8 +3,6 @@
 import AddProduct3 from "@/components/AddProduct3";
 import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
@@ -16,7 +14,7 @@ export default function Home() {
   };
 
   return (
-    <div className="py-4 px-5">
+    <div className="py-4 px-5 w-full flex flex-col justify-center">
       {isVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
           <div className="fixed bg-[#F4F4F4] dark:bg-[#2D2D2D] p-7 rounded-lg shadow-lg flex flex-col w-[50%]">
@@ -49,34 +47,36 @@ export default function Home() {
         </span>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <div
-          onClick={toggleComponent}
-          className="flex flex-col m-3 items-center justify-center bg-[#F4F4F4] dark:bg-[#2D2D2D] rounded-lg border border-[#BCBCBC] dark:border-[#434343] transition-transform transform hover:scale-105 hover:shadow-lg cursor-pointer"
-        >
-          <Image
-            src={"/plus_icon.svg"}
-            width={60}
-            height={60}
-            alt="plus icon"
-          />
-          <h1 className="text-lg font-semibold">Add Product</h1>
-        </div>
+      <div className="flex flex-col items-center">
+        <div className="grid grid-cols-1 justify-center gap-4 sm:grid-cols-2 lg:grid-cols-3 ">
+          <div
+            onClick={toggleComponent}
+            className="flex flex-col m-3 items-center justify-center bg-[#F4F4F4] dark:bg-[#2D2D2D] rounded-lg border border-[#BCBCBC] dark:border-[#434343] transition-transform transform hover:scale-105 hover:shadow-lg cursor-pointer"
+          >
+            <Image
+              src={"/plus_icon.svg"}
+              width={60}
+              height={60}
+              alt="plus icon"
+            />
+            <h1 className="text-lg font-semibold">Add Product</h1>
+          </div>
 
-        <div className="m-3">
-          <ProductCard />
-        </div>
-        <div className="m-3">
-          <ProductCard />
-        </div>
-        <div className="m-3">
-          <ProductCard />
-        </div>
-        <div className="m-3">
-          <ProductCard />
-        </div>
-        <div className="m-3">
-          <ProductCard />
+          <div className="m-3">
+            <ProductCard />
+          </div>
+          <div className="m-3">
+            <ProductCard />
+          </div>
+          <div className="m-3">
+            <ProductCard />
+          </div>
+          <div className="m-3">
+            <ProductCard />
+          </div>
+          <div className="m-3">
+            <ProductCard />
+          </div>
         </div>
       </div>
     </div>
