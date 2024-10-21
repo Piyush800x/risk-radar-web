@@ -32,10 +32,14 @@ export default function AddProduct3() {
   const [debouncedVendorSearch, setDebouncedVendorSearch] =
     useState(vendorSearch);
 
-  const {isAuthenticated, user} = useKindeBrowserClient();
+  const { isAuthenticated, user } = useKindeBrowserClient();
+  const [isLoading, setIsLoading] = useState(false);
+
+  console.log(isLoading);
 
   // Function to fetch vendors based on the vendor search query
   const fetchData = async () => {
+    setIsLoading(true);
     const res = await fetch("/api/vendors", {
       method: "GET",
       headers: {
@@ -43,6 +47,7 @@ export default function AddProduct3() {
         Metadata: JSON.stringify(debouncedVendorSearch),
       },
     });
+    setIsLoading(false);
     const data = await res.json();
     setVendors(data.data || []);
     setFilteredVendors(data.data || []); // Initialize filtered vendors
@@ -125,35 +130,34 @@ export default function AddProduct3() {
       userLastName: user?.family_name,
       vendorName,
       productName,
-      selectedVersion
-    }
+      selectedVersion,
+    };
 
-    const response = await fetch('/api/add-product', {
+    const response = await fetch("/api/add-product", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(productData)
+      body: JSON.stringify(productData),
     });
 
     const result = await response.json();
     if (result.success) {
-      toast.success("Product added successfully.")
+      toast.success("Product added successfully.");
+    } else {
+      toast.error("Couldn't add product.\nPlaese try again!");
     }
-    else {
-      toast.error("Couldn't add product.\nPlaese try again!")
-    }
-    console.log(`Products: ${JSON.stringify(productData)}`)
-  }
+    console.log(`Products: ${JSON.stringify(productData)}`);
+  };
 
   return (
-    
     <div className="w-full flex justify-center items-center">
       <div className="">
         <div className="space-y-4">
           {/* Vendor Dropdown with Search */}
           <div className="w-full">
             <label htmlFor="vendorName">Vendor Name</label>
+            {/* {isLoading && <p>Loading...<LoaderCircle className="animate-spin"/></p>} */}
             <input
               type="text"
               placeholder="Search Vendor"
@@ -167,7 +171,13 @@ export default function AddProduct3() {
               onChange={(e) => setVendorName(e.target.value)}
               className="border p-2 w-full rounded-md"
             >
-              <option value="">Select Vendor</option>
+              {isLoading ? (
+                <option value="" disabled>
+                  <h1>Loading...</h1>
+                </option>
+              ) : (
+                <option value="">Select Vendor</option>
+              )}
               {filteredVendors.map((vendor) => (
                 <option key={vendor._id} value={vendor.vendorName}>
                   {vendor.vendorName}
@@ -214,7 +224,11 @@ export default function AddProduct3() {
                 onChange={(e) => setVersionSearch(e.target.value)}
                 className="border p-2 mb-2 w-full rounded-md"
               />
-              <select id="version" className="border p-2 w-full rounded-md" onChange={(e) => setSelectedVersion(e.target.value)}>
+              <select
+                id="version"
+                className="border p-2 w-full rounded-md"
+                onChange={(e) => setSelectedVersion(e.target.value)}
+              >
                 <option value="">Select Version</option>
                 {filteredVersions.map((version, index) => (
                   <option key={index} value={version}>
