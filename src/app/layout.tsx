@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner"
 
+
 export const metadata: Metadata = {
   title: "Risk Radar",
   description: "Sophisticated vulnerabilities detection and alerting software",
