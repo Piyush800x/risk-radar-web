@@ -7,12 +7,12 @@ export default function Notifications() {
       <h1 className="text-neutral-600 text-lg font-semibold dark:invert">
         Notifications
       </h1>
-      <div className="mt-6 dark:invert">
-        <span className="text-neutral-900 text-3xl font-extrabold tracking-wide">
+      <div className="mt-6 ">
+        <span className="text-neutral-900 text-3xl font-extrabold tracking-wide dark:text-white">
           Welcome,
           <br />
         </span>
-        <span className="text-neutral-700 text-lg font-medium tracking-wide">
+        <span className="text-neutral-700 text-lg font-medium tracking-wide dark:invert">
           See all your notifications here
         </span>
       </div>

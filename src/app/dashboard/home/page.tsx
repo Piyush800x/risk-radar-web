@@ -4,6 +4,8 @@ import AddProduct3 from "@/components/AddProduct3";
 import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
@@ -37,12 +39,18 @@ export default function Home() {
       <h1 className="text-neutral-600 text-lg font-semibold dark:invert">
         Home
       </h1>
-      <div className="mt-6 dark:invert">
-        <span className="text-neutral-900 text-3xl font-extrabold tracking-wide">
-          Welcome,
-          <br />
-        </span>
-        <span className="text-neutral-700 text-lg font-medium tracking-wide">
+      <div className="mt-6">
+        
+          <div className="flex justify-between items-center text-neutral-900 text-3xl font-extrabold tracking-wide">
+            <span className="dark:text-white">Welcome,</span>
+
+            <div className="w-1/4 flex items-center relative">
+              <Search className="absolute left-3 size-5 dark:invert" />
+              <Input placeholder="Search by product name" className="pl-10 dark:bg-[#2D2D2D] dark:text-white"/>
+            </div>
+          
+        </div>
+        <span className="text-neutral-700 text-lg font-medium tracking-wide dark:invert">
           Monitor and manage all of your products here
         </span>
       </div>
