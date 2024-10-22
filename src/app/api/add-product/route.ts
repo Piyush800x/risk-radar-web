@@ -127,8 +127,19 @@ const updateCVE = async (productData: Products) => {
         if (res.results.length == 0) {
             return false
         } 
-        console.log(JSON.stringify(res.results[0].maxCvssBaseScore))
+        console.log(JSON.stringify(res.results[0].cveId))
 
+        // calling flask api
+        const req = await fetch("http://127.0.0.1:5000/api/sort/", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(res)
+        })
+        const res3 = await req.json();
+        console.log(`Flask API : ${JSON.stringify(res3)}`);
+        
         // Add solution using Gemini api here
         const solution = await getSolution(res.results[0].summary, productData.vendorName, productData.productName);
         
@@ -142,16 +153,34 @@ const updateCVE = async (productData: Products) => {
             summary: res.results[0].summary,
             epssScore: res.results[0].epssScore,
             maxCvssBaseScore: res.results[0].maxCvssBaseScore,
-            aiSolution: solution
+            aiSolution: solution,
+            high: res3.high,
+            critical: res3.critical
         }
         // Saving to DB
-        const inserQuery = await db.collection('cve').insertOne(insertedData);
-        if (inserQuery.insertedId) {
+        const result = await db.collection('cve').updateOne(
+            {
+                vendorName: productData.vendorName,
+                productName: productData.productName,
+                productVersion: productData.productVersion
+            },
+            {
+                $set: insertedData
+            },
+            { upsert: true }
+        );
+        if (result.upsertedId || result.modifiedCount > 0) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
+        // const inserQuery = await db.collection('cve').insertOne(insertedData);
+        // if (inserQuery.insertedId) {
+        //     return true;
+        // }
+        // else {
+        //     return false;
+        // }
     } catch (error) {
         console.log(error)
         return false;
