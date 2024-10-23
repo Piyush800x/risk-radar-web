@@ -57,7 +57,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 {
                     $push: {products: productData}
                 },
-                // {upsert: true}
+                {upsert: true}
             );
             console.log(`modifiedCount: ${updatedUser.modifiedCount}`)
             if (updatedUser.modifiedCount > 0) {
@@ -129,33 +129,28 @@ const updateCVE = async (productData: Products) => {
         } 
         console.log(JSON.stringify(res.results[0].cveId))
 
+        const data = {productData, ...res};
         // calling flask api
         const req = await fetch("http://127.0.0.1:5000/api/sort/", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(res)
+            body: JSON.stringify(data)
         })
         const res3 = await req.json();
         console.log(`Flask API : ${JSON.stringify(res3)}`);
         
         // Add solution using Gemini api here
-        const solution = await getSolution(res.results[0].summary, productData.vendorName, productData.productName);
+        // const solution = await getSolution(res.results[0].summary, productData.vendorName, productData.productName);
         
         const insertedData = {
             vendorName: productData.vendorName,
             productName: productData.productName,
             productVersion: productData.productVersion,
-            cveId: res.results[0].cveId,
-            cveNumber: res.results[0].cveNumber,
-            nvdVulnStatus: res.results[0].nvdVulnStatus,
-            summary: res.results[0].summary,
-            epssScore: res.results[0].epssScore,
-            maxCvssBaseScore: res.results[0].maxCvssBaseScore,
-            aiSolution: solution,
             high: res3.high,
-            critical: res3.critical
+            critical: res3.critical,
+            cveResults: res3.cveResults
         }
         // Saving to DB
         const result = await db.collection('cve').updateOne(
@@ -187,14 +182,14 @@ const updateCVE = async (productData: Products) => {
     }
 }
 
-const getSolution = async (summary: string, vendorName: string, productName: string) => {
-    const prompt = `
-        Here I have a product named ${productName} from ${vendorName}.
-        This product has a vulnerability and here is the summary: 
-        ${summary}.
-        I want you to give a straight forward solution so that end users can quickly understand what to do to fix the vulnerability.
-    `
-    const result = await geminiModel.generateContent(prompt);
-    console.log(result.response.text())
-    return result.response.text();
-}
+// const getSolution = async (summary: string, vendorName: string, productName: string) => {
+//     const prompt = `
+//         Here I have a product named ${productName} from ${vendorName}.
+//         This product has a vulnerability and here is the summary: 
+//         ${summary}.
+//         I want you to give a straight forward solution so that end users can quickly understand what to do to fix the vulnerability.
+//     `
+//     const result = await geminiModel.generateContent(prompt);
+//     console.log(result.response.text())
+//     return result.response.text();
+// }
