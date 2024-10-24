@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { Loader2 } from "lucide-react";
 
 interface VendorProductData {
   _id: string; // Assuming this will be a string when returned from MongoDB
@@ -34,8 +35,9 @@ export default function AddProduct3() {
 
   const { isAuthenticated, user } = useKindeBrowserClient();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  console.log(isLoading);
+  // console.log(isLoading);
 
   // Function to fetch vendors based on the vendor search query
   const fetchData = async () => {
@@ -123,6 +125,7 @@ export default function AddProduct3() {
   }, [versionSearch, versions]);
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     const productData = {
       authId: user?.id,
       authEmailId: user?.email,
@@ -148,6 +151,7 @@ export default function AddProduct3() {
       toast.error("Couldn't add product.\nPlaese try again!");
     }
     console.log(`Products: ${JSON.stringify(productData)}`);
+    setIsSubmitting(false);
   };
 
   return (
@@ -157,7 +161,6 @@ export default function AddProduct3() {
           {/* Vendor Dropdown with Search */}
           <div className="w-full">
             <label htmlFor="vendorName">Vendor Name</label>
-            {/* {isLoading && <p>Loading...<LoaderCircle className="animate-spin"/></p>} */}
             <input
               type="text"
               placeholder="Search Vendor"
@@ -204,6 +207,7 @@ export default function AddProduct3() {
                 className="border p-2 w-full rounded-md"
               >
                 <option value="">Select Product</option>
+
                 {filteredProducts.map((product) => (
                   <option key={product} value={product}>
                     {product}
@@ -239,8 +243,15 @@ export default function AddProduct3() {
             </div>
           )}
 
-          <Button className="" onClick={handleSubmit}>
-            Add
+          <Button className="" onClick={handleSubmit} disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Adding...
+              </>
+            ) : (
+              "Add"
+            )}
           </Button>
         </div>
       </div>
