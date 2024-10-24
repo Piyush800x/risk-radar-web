@@ -18,10 +18,10 @@ interface Props {
   productVersion: string
   criticalCount: number
   highCount: number
-  cveResults: CVEResults[]
+  objId: string
 }
 
-export default function ProductCard({vendorName, productName, productVersion, criticalCount, highCount, cveResults}: Props) {
+export default function ProductCard({vendorName, productName, productVersion, criticalCount, highCount, objId}: Props) {
   return (
     <>
       <div className="flex flex-wrap gap-14 p-4 bg-[#F4F4F4] dark:bg-[#2D2D2D] rounded-lg border border-[#BCBCBC] dark:border-[#434343] transition-transform transform hover:scale-105 hover:shadow-lg">
@@ -63,7 +63,7 @@ export default function ProductCard({vendorName, productName, productVersion, cr
               query: {
                 productName: productName,
                 productVersion: productVersion,
-                cveResults: JSON.stringify(cveResults)
+                objId: objId
               }
             }}
           >

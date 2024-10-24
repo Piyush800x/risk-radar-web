@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { ObjectId } from "mongodb";
 import { useState, useEffect } from "react";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
@@ -17,19 +18,59 @@ interface CVEData {
 
 export default function ViewDetails() {
   const searchParams = useSearchParams();
+  const [loading, setLoading] = useState<boolean>(false);
+  const {isAuthenticated, user} = useKindeBrowserClient();
 
   const productName = searchParams.get("productName");
   const version = searchParams.get("productVersion");
-  const cveResultsString = searchParams.get("cveResults");
+  // const cveResultsString = searchParams.get("cveResults");
+  const objId = searchParams.get("objId");
 
   const [cveResults, setCveResults] = useState<CVEData[]>([]);
 
-  useEffect(() => {
-    if (cveResultsString) {
-      setCveResults(JSON.parse(cveResultsString));
-      console.log(JSON.stringify(cveResultsString));
+  const fetchData = async () => {
+    setLoading(true);
+    if (user) {
+      const data = {
+        objId: objId
+      }
+      try {
+        const req = await fetch("/api/get-cveresults", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data)
+        });
+        const res = await req.json();
+        setCveResults(res.data[0].cveResults);
+        console.log(`cve: ${JSON.stringify(res.data[0].cveResults)}`);
+  
+        }
+        catch (error) {
+          console.error(error);
+        }  
     }
-  }, [cveResultsString]);
+    setLoading(false);
+  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchData();
+      console.log(objId);
+    }
+  
+  }, [isAuthenticated, user]);
+
+  // useEffect(() => {
+  //   if (cveResultsString) {
+  //     setCveResults(JSON.parse(cveResultsString));
+  //     console.log(JSON.stringify(cveResultsString));
+  //   }
+  // }, [cveResultsString]);
+
+  if (loading) {
+    return <h1>Loading</h1>
+  }
 
   return (
     <>

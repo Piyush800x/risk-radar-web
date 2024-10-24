@@ -18,7 +18,7 @@ interface CVEResults {
 }
 
 interface CVEData {
-  _id: ObjectId;
+  _id: string;
   vendorName: string;
   productName: string;
   productVersion: string;
@@ -43,6 +43,7 @@ export default function Home() {
   useEffect(() => {
     if (isAuthenticated) {
       fetchData();
+      console.log(JSON.stringify(products));
     }
   }, [isAuthenticated, user]);
 
@@ -140,7 +141,7 @@ export default function Home() {
           {products && products.length > 0 ? (
             products.map((product: CVEData) => (
               <div className="m-3" key={product._id.toString()}>
-                <ProductCard vendorName={product.vendorName} productName={product.productName} productVersion={product.productVersion} criticalCount={product.critical} highCount={product.high} cveResults={product.cveResults}/>
+                <ProductCard vendorName={product.vendorName} productName={product.productName} productVersion={product.productVersion} criticalCount={product.critical} highCount={product.high} objId={product._id}/>
               </div>
             ))
           ) : (
