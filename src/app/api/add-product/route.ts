@@ -3,6 +3,8 @@ import mongoClientPromise from "@/lib/mongodb";
 import { Db, MongoClient, ObjectId } from "mongodb";
 import { geminiModel } from "@/lib/gemini";
 
+const FLASK_API_ENDPOINT = process.env.FLASK_API_ENDPOINT
+
 interface Products {
     vendorName: string;
     productName: string,
@@ -131,7 +133,7 @@ const updateCVE = async (productData: Products) => {
 
         const data = {productData, ...res};
         // calling flask api
-        const req = await fetch("http://127.0.0.1:5000/api/sort/", {
+        const req = await fetch(`${FLASK_API_ENDPOINT}api/sort/`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
