@@ -9,6 +9,14 @@ import { Search } from "lucide-react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { ObjectId } from "mongodb";
 
+interface CVEResults {
+  aiSolution: string;
+  cveId: string;
+  epssScore: string;
+  maxCvssBaseScore: string;
+  nvdVulnStatus: string;
+}
+
 interface CVEData {
   _id: ObjectId;
   vendorName: string;
@@ -30,6 +38,7 @@ export default function Home() {
   const {isAuthenticated, user} = useKindeBrowserClient();
   const [products, setProducts] = useState<CVEData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [cveResults, setCveResults] = useState<CVEResults[]>([]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -55,6 +64,7 @@ export default function Home() {
         const res = await req.json();
         setProducts(res);
         console.log(JSON.stringify(res));
+        setCveResults(res.cveResults);
       }
       catch (error) {
         console.error(error);
@@ -130,7 +140,7 @@ export default function Home() {
           {products && products.length > 0 ? (
             products.map((product: CVEData) => (
               <div className="m-3" key={product._id.toString()}>
-                <ProductCard vendorName={product.vendorName} productName={product.productName} productVersion={product.productVersion} criticalCount={product.critical} highCount={product.high}/>
+                <ProductCard vendorName={product.vendorName} productName={product.productName} productVersion={product.productVersion} criticalCount={product.critical} highCount={product.high} cveResults={product.cveResults}/>
               </div>
             ))
           ) : (

@@ -4,15 +4,24 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
+interface CVEResults {
+  aiSolution: string;
+  cveId: string;
+  epssScore: string;
+  maxCvssBaseScore: string;
+  nvdVulnStatus: string;
+}
+
 interface Props {
   vendorName: string;
   productName: string;
   productVersion: string
   criticalCount: number
   highCount: number
+  cveResults: CVEResults[]
 }
 
-export default function ProductCard({vendorName, productName, productVersion, criticalCount, highCount}: Props) {
+export default function ProductCard({vendorName, productName, productVersion, criticalCount, highCount, cveResults}: Props) {
   return (
     <>
       <div className="flex flex-wrap gap-14 p-4 bg-[#F4F4F4] dark:bg-[#2D2D2D] rounded-lg border border-[#BCBCBC] dark:border-[#434343] transition-transform transform hover:scale-105 hover:shadow-lg">
@@ -48,7 +57,15 @@ export default function ProductCard({vendorName, productName, productVersion, cr
 
         <div className="w-full flex justify-end">
           <Link
-            href={"/dashboard/view-details?product=google%20chrome&version=91"}
+            // href={"/dashboard/view-details?product=google%20chrome&version=91"}
+            href={{
+              pathname:"/dashboard/view-details", 
+              query: {
+                productName: productName,
+                productVersion: productVersion,
+                cveResults: JSON.stringify(cveResults)
+              }
+            }}
           >
             <Button>View Details</Button>
           </Link>
