@@ -1,5 +1,4 @@
 "use client";
-import NavBar from "@/components/NavBar";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -74,12 +73,12 @@ export default function ViewDetails() {
 
   return (
     <>
-    <div>
-      <NavBar />
-      <h1 className="text-xl pb-4">
-        All vulnerabilities of <span className="font-bold">{productName}</span>{" "}
-        version <span className="font-bold">{version}</span>:
-      </h1>
+      <div className="mx-4">
+        <h1 className="text-xl pb-4">
+          All vulnerabilities of{" "}
+          <span className="font-bold">{productName}</span> version{" "}
+          <span className="font-bold">{version}</span>:
+        </h1>
 
       {cveResults.map((cve, index) => (
         <ViewDetailsComp cve={cve} index={index}/>
