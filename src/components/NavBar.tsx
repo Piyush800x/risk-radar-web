@@ -13,18 +13,16 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 
 export default function NavBar() {
   const { isAuthenticated } = useKindeBrowserClient();
-  const { user, getUser } = useKindeBrowserClient();
+  const { user } = useKindeBrowserClient();
 
   return (
     <header className="h-14 flex items-center mx-4">

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoClientPromise from "@/lib/mongodb";
 import { Db, MongoClient, ObjectId } from "mongodb";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
     const data = await req.json();
     console.log(`_id: ${data.objId}`)
     const client: MongoClient = await mongoClientPromise;

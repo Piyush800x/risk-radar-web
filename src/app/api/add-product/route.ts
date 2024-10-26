@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoClientPromise from "@/lib/mongodb";
-import { Db, MongoClient, ObjectId } from "mongodb";
-import { geminiModel } from "@/lib/gemini";
+import { Db, MongoClient } from "mongodb";
 
 const FLASK_API_ENDPOINT = process.env.FLASK_API_ENDPOINT
 
@@ -11,16 +10,15 @@ interface Products {
     productVersion: string
 }
 
-interface User {
-    _id: ObjectId;
+interface UserData {
     authId: string;
     authEmailId: string;
     userFirstName: string;
     userLastName: string;
-    products: Products[];
+    products?: Products[];
 }
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
     const client: MongoClient = await mongoClientPromise;
     const db: Db = client.db("UserData");
 
@@ -52,12 +50,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
     // return NextResponse.json({success: true}); 
     if (res2.success) {
         try {
-            const updatedUser = await db.collection('userdata').updateOne(
+            const updatedUser = await db.collection<UserData>('userdata').updateOne(
                 {
                     authId: authId
                 },
                 {
-                    $push: {products: productData}
+                    $push: {products: productData as Products}
                 },
                 {upsert: true}
             );
