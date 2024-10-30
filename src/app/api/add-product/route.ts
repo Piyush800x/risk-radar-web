@@ -21,62 +21,69 @@ interface UserData {
 export async function POST(req: NextRequest) {
     const client: MongoClient = await mongoClientPromise;
     const db: Db = client.db("UserData");
+    const NEXT_PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL!;
 
-    const {authId, authEmailId, userFirstName, userLastName, ...data} = await req.json();
-    const userDetails = {
-        authId, authEmailId, userFirstName, userLastName
-    }
-    const productData: Products = {
-        vendorName: data.vendorName,
-        productName: data.productName,
-        productVersion: data.selectedVersion
-    }
-    console.log(`userDetails: ${JSON.stringify(userDetails)}`);
+    try {
+        const {authId, authEmailId, userFirstName, userLastName, ...data} = await req.json();
+        const userDetails = {
+            authId, authEmailId, userFirstName, userLastName
+        }
+        const productData: Products = {
+            vendorName: data.vendorName,
+            productName: data.productName,
+            productVersion: data.selectedVersion
+        }
+        console.log(`userDetails: ${JSON.stringify(userDetails)}`);
 
-    // To check if any users exists else create one
-    const checkUserUrl = new URL('/api/check-user', req.nextUrl.origin);
-    const response = await fetch(checkUserUrl.toString(), {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-          },
-        body: JSON.stringify(userDetails)
-    });
-    const res2 = await response.json();
-    console.log(`check-user response ${JSON.stringify(res2)}`);
+        // To check if any users exists else create one
+        const checkUserUrl = new URL('/api/check-user', NEXT_PUBLIC_API_BASE_URL);
+        const response = await fetch(checkUserUrl.toString(), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userDetails)
+        });
+        const res2 = await response.json();
+        console.log(`check-user response ${JSON.stringify(res2)}`);
 
 
-    // await updateCVE(productData);
-    // return NextResponse.json({success: true}); 
-    if (res2.success) {
-        try {
-            const updatedUser = await db.collection<UserData>('userdata').updateOne(
-                {
-                    authId: authId
-                },
-                {
-                    $push: {products: productData as Products}
-                },
-                {upsert: true}
-            );
-            console.log(`modifiedCount: ${updatedUser.modifiedCount}`)
-            if (updatedUser.modifiedCount > 0) {
-                const setCVE = await updateCVE(productData);
-                console.log(`CVE: ${setCVE}`)
-                if (setCVE) {
-                    return NextResponse.json({success: true});
+        // await updateCVE(productData);
+        // return NextResponse.json({success: true}); 
+        if (res2.success) {
+            try {
+                const updatedUser = await db.collection<UserData>('userdata').updateOne(
+                    {
+                        authId: authId
+                    },
+                    {
+                        $push: {products: productData as Products}
+                    },
+                    {upsert: true}
+                );
+                console.log(`modifiedCount: ${updatedUser.modifiedCount}`)
+                if (updatedUser.modifiedCount > 0) {
+                    const setCVE = await updateCVE(productData);
+                    console.log(`CVE: ${setCVE}`)
+                    if (setCVE) {
+                        return NextResponse.json({success: true});
+                    }
+                    else {
+                        return NextResponse.json({success: false});
+                    }
                 }
                 else {
                     return NextResponse.json({success: false});
                 }
             }
-            else {
+            catch (error) {
                 return NextResponse.json({success: false});
             }
         }
-        catch (error) {
-            return NextResponse.json({success: false});
-        }
+    }
+    catch (error) {
+        console.error('Error in /api/add-product:', error)
+        return NextResponse.json({ success: false, error: error });
     }
     
 }
