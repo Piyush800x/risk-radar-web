@@ -86,7 +86,9 @@ export function AppSidebar() {
                 <SidebarMenuButton
                   asChild
                   className={`${
-                    notiSelected ? "bg-black/10 dark:bg-slate-200/10 hover:bg-black/15" : ""
+                    notiSelected
+                      ? "bg-black/10 dark:bg-slate-200/10 hover:bg-black/15"
+                      : ""
                   } `}
                 >
                   <Link href={"/dashboard/notifications"}>
@@ -100,7 +102,9 @@ export function AppSidebar() {
                 <SidebarMenuButton
                   asChild
                   className={`${
-                    settingsSelected ? "bg-black/10 dark:bg-slate-200/10 hover:bg-black/15" : ""
+                    settingsSelected
+                      ? "bg-black/10 dark:bg-slate-200/10 hover:bg-black/15"
+                      : ""
                   } `}
                 >
                   <Link href={"/dashboard/settings"}>
@@ -114,7 +118,9 @@ export function AppSidebar() {
                 <SidebarMenuButton
                   asChild
                   className={`${
-                    billingSelected ? "bg-black/10 dark:bg-slate-200/10 hover:bg-black/15" : ""
+                    billingSelected
+                      ? "bg-black/10 dark:bg-slate-200/10 hover:bg-black/15"
+                      : ""
                   } `}
                 >
                   <Link href={"/dashboard/billing"}>
