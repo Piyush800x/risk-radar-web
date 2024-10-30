@@ -16,7 +16,6 @@ interface VendorProductData {
 export default function AddProduct3() {
   const [vendorName, setVendorName] = useState("");
   const [productName, setProductName] = useState("");
-  const [vendors, setVendors] = useState<string[]>([]);
   const [filteredVendors, setFilteredVendors] = useState<VendorProductData[]>(
     []
   );
@@ -33,7 +32,7 @@ export default function AddProduct3() {
   const [debouncedVendorSearch, setDebouncedVendorSearch] =
     useState(vendorSearch);
 
-  const { isAuthenticated, user } = useKindeBrowserClient();
+  const { user } = useKindeBrowserClient();
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -51,7 +50,6 @@ export default function AddProduct3() {
     });
     setIsLoading(false);
     const data = await res.json();
-    setVendors(data.data || []);
     setFilteredVendors(data.data || []); // Initialize filtered vendors
   };
 

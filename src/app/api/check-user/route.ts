@@ -1,23 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoClientPromise from "@/lib/mongodb";
-import { Db, MongoClient, ObjectId } from "mongodb";
+import { Db, MongoClient } from "mongodb";
 
-interface Products {
-    vendorName: string;
-    productName: string,
-    productVersion: string
-}
 
-interface User {
-    _id: ObjectId;
-    authId: string;
-    authEmailId: string;
-    userFirstName: string;
-    userLastName: string;
-    products: Products[]
-}
-
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
     const client: MongoClient = await mongoClientPromise;
     const db: Db = client.db("UserData");
 

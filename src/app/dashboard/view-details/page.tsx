@@ -1,6 +1,5 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { ObjectId } from "mongodb";
 import { useState, useEffect } from "react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import ViewDetailsComp from "@/components/ViewDetailsComp";
@@ -79,9 +78,8 @@ export default function ViewDetails() {
         </h1>
 
       {cveResults.map((cve, index) => (
-        <ViewDetailsComp cve={cve} index={index}/>
+        <ViewDetailsComp cve={cve} index={index} key={cve.cveId}/>
       ))}
-    
       </div>
     </>
   );

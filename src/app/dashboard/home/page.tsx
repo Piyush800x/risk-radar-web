@@ -7,15 +7,7 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { ObjectId } from "mongodb";
 
-interface CVEResults {
-  aiSolution: string;
-  cveId: string;
-  epssScore: string;
-  maxCvssBaseScore: string;
-  nvdVulnStatus: string;
-}
 
 interface CVEData {
   _id: string;
@@ -38,7 +30,6 @@ export default function Home() {
   const {isAuthenticated, user} = useKindeBrowserClient();
   const [products, setProducts] = useState<CVEData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [cveResults, setCveResults] = useState<CVEResults[]>([]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -65,7 +56,6 @@ export default function Home() {
         const res = await req.json();
         setProducts(res);
         console.log(JSON.stringify(res));
-        setCveResults(res.cveResults);
       }
       catch (error) {
         console.error(error);
@@ -111,7 +101,7 @@ export default function Home() {
       <div className="mt-6">
         
           <div className="flex justify-between items-center text-neutral-900 text-3xl font-extrabold tracking-wide">
-            <span className="dark:text-white">Welcome,</span>
+            <span className="dark:text-white">Welcome, {user?.given_name}</span>
 
             <div className="w-1/4 flex items-center relative">
               <Search className="absolute left-3 size-5 dark:invert" />

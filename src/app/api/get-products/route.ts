@@ -32,7 +32,7 @@ interface CVEData {
     }[];
 }
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
     const client: MongoClient = await mongoClientPromise;
     const db1: Db = client.db("UserData");
     const db2: Db = client.db("CVE-Data");
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     try {
         const data = await req.json();
 
-        const user: User | null = await db1.collection('userdata').findOne({authId: data.authId});
+        const user: User | null = await db1.collection<User>('userdata').findOne({authId: data.authId});
         if (!user) {
             return NextResponse.json({success: false, message: "No user found!"}, {status: 404});
         }
@@ -48,11 +48,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const products: Products[] = user?.products;
 
         // Initialize an array to hold CVE data
-        let cveData: CVEData[] = [];
+        const cveData: CVEData[] = [];
 
         // Loop through each product and fetch CVE data from the CVE-Data collection
         for (const product of products) {
-            const cveResult = await db2.collection('cve').findOne({
+            const cveResult = await db2.collection<CVEData>('cve').findOne({
                 vendorName: product.vendorName,
                 productName: product.productName,
                 productVersion: product.productVersion,

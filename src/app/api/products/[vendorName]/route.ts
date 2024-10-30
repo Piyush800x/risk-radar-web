@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import mongoClientPromise from '@/lib/mongodb';
 import { Collection, Db, MongoClient } from 'mongodb';
 
-export async function GET(req: NextRequest, { params }: any) {
-  const { vendorName } = params;
+
+export async function GET(req: NextRequest, context: { params: { vendorName: string } }) {
+  const { vendorName } = context.params;
   
   try {
     const client: MongoClient = await mongoClientPromise;
