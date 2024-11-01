@@ -5,48 +5,58 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { toast } from "sonner";
+import { Trash2, LoaderCircle } from "lucide-react";
+import { useState } from "react";
 
 interface Props {
   vendorName: string;
   productName: string;
-  productVersion: string
-  criticalCount: number
-  highCount: number
-  objId: string
+  productVersion: string;
+  criticalCount: number;
+  highCount: number;
+  objId: string;
 }
 
-export default function ProductCard({vendorName, productName, productVersion, criticalCount, highCount, objId}: Props) {
-  const {isAuthenticated, user} = useKindeBrowserClient();
+export default function ProductCard({
+  vendorName,
+  productName,
+  productVersion,
+  criticalCount,
+  highCount,
+  objId,
+}: Props) {
+  const { isAuthenticated, user } = useKindeBrowserClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const removeProduct = async () => {
+    setIsLoading(true);
     if (isAuthenticated) {
       const data = {
         userAuthId: user?.id,
         productObjId: objId,
         vendorName,
         productName,
-        productVersion
-      }
+        productVersion,
+      };
 
       const req = await fetch("/api/remove-product", {
-        method: "POST", 
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
-        }, 
-        body: JSON.stringify(data)
+        },
+        body: JSON.stringify(data),
       });
 
       const resp = await req.json();
 
       if (resp.success) {
-        toast.success("Product deleted successfully!")
+        toast.success("Product deleted successfully!");
+      } else {
+        toast.error("Can't delete product!\nTry again later");
       }
-      else {
-        toast.error("Can't delete product!\nTry again later")
-      }
-
     }
-  }
+    setIsLoading(false);
+  };
 
   return (
     <>
@@ -85,24 +95,35 @@ export default function ProductCard({vendorName, productName, productVersion, cr
           <Link
             // href={"/dashboard/view-details?product=google%20chrome&version=91"}
             href={{
-              pathname:"/dashboard/view-details", 
+              pathname: "/dashboard/view-details",
               query: {
                 productName: productName,
                 productVersion: productVersion,
-                objId: objId
-              }
+                objId: objId,
+              },
             }}
+            className="flex justify-between gap-4 w-full"
           >
             <Button>View Details</Button>
           </Link>
-        </div>
 
-        <div>
-          <button onClick={() => {
-            removeProduct()
-          }}>
-            Delete
-          </button>
+          <Button
+            onClick={() => {
+              removeProduct();
+            }}
+            disabled={isLoading}
+            className={`${
+              isLoading
+                ? "dark:bg-slate-700 bg-slate-700"
+                : "dark:bg-red-700 bg-red-600 hover:bg-red-500"
+            }`}
+          >
+            {isLoading ? (
+              <LoaderCircle className="animate-spin size-5 dark:invert" />
+            ) : (
+              <Trash2 className="size-5 dark:invert" />
+            )}
+          </Button>
         </div>
       </div>
     </>
