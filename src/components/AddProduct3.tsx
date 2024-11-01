@@ -134,7 +134,8 @@ export default function AddProduct3() {
       selectedVersion,
     };
 
-    const response = await fetch("/api/add-product", {
+    // Add Products
+    const response = await fetch("/api/add-product-v2", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -144,9 +145,11 @@ export default function AddProduct3() {
 
     const result = await response.json();
     if (result.success) {
-      toast.success("Product added successfully.");
+      // toast.success("Product added successfully.");
+      toast.success(result.message);   // For v2 api only
     } else {
-      toast.error("Couldn't add product.\nPlaese try again!");
+      // toast.error("Couldn't add product.\nPlaese try again!");
+      toast.error(result.message);    // For v2 api only
     }
     console.log(`Products: ${JSON.stringify(productData)}`);
     setIsSubmitting(false);

@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
-
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { toast } from "sonner";
 
 interface Props {
   vendorName: string;
@@ -15,6 +16,38 @@ interface Props {
 }
 
 export default function ProductCard({vendorName, productName, productVersion, criticalCount, highCount, objId}: Props) {
+  const {isAuthenticated, user} = useKindeBrowserClient();
+
+  const removeProduct = async () => {
+    if (isAuthenticated) {
+      const data = {
+        userAuthId: user?.id,
+        productObjId: objId,
+        vendorName,
+        productName,
+        productVersion
+      }
+
+      const req = await fetch("/api/remove-product", {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json",
+        }, 
+        body: JSON.stringify(data)
+      });
+
+      const resp = await req.json();
+
+      if (resp.success) {
+        toast.success("Product deleted successfully!")
+      }
+      else {
+        toast.error("Can't delete product!\nTry again later")
+      }
+
+    }
+  }
+
   return (
     <>
       <div className="flex flex-wrap gap-14 p-4 bg-[#F4F4F4] dark:bg-[#2D2D2D] rounded-lg border border-[#BCBCBC] dark:border-[#434343] transition-transform transform hover:scale-105 hover:shadow-lg">
@@ -62,6 +95,14 @@ export default function ProductCard({vendorName, productName, productVersion, cr
           >
             <Button>View Details</Button>
           </Link>
+        </div>
+
+        <div>
+          <button onClick={() => {
+            removeProduct()
+          }}>
+            Delete
+          </button>
         </div>
       </div>
     </>

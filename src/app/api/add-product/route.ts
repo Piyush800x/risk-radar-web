@@ -92,7 +92,7 @@ const updateCVE = async (productData: Products) => {
     const client: MongoClient = await mongoClientPromise;
     const db: Db = client.db("CVE-Data");
 
-    const list = ["application", "o", "hardware", "h", "a"]
+    const list = ["application", "os", "hardware", "h", "a"]
     let active = true;
     let count = 0;
     try {
