@@ -1,4 +1,4 @@
-import { LandingPage } from "@/components/LandingPage";
+import { LandingPage } from "@/components/LandingPage/LandingPage";
 import NavBar from "@/components/NavBar";
 
 export default function Home() {
