@@ -8,7 +8,7 @@ export default function Notifications() {
         Notifications
       </h1>
       <div className="mt-6 ">
-        <span className="text-neutral-900 text-3xl font-extrabold tracking-wide dark:text-white">
+        <span className="text-neutral-900 text-3xl font-semibold tracking-wide dark:text-white">
           Welcome,
           <br />
         </span>

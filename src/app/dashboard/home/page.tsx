@@ -120,14 +120,14 @@ export default function Home() {
         Home
       </h1>
       <div className="mt-6">
-        <div className="flex justify-between items-center text-neutral-900 text-3xl font-extrabold tracking-wide">
+        <div className="flex justify-between items-center text-neutral-900 text-3xl font-semibold tracking-wide">
           <span className="dark:text-white">Welcome, {user?.given_name}</span>
 
           <div className="w-1/4 flex items-center relative">
             <Search className="absolute left-3 size-5 dark:invert" />
             <Input
               placeholder="Search by product name"
-              className="pl-10 dark:bg-[#2D2D2D] dark:text-white"
+              className="pl-10 dark:bg-[#2D2D2D] dark:text-white font-medium"
             />
           </div>
         </div>
