@@ -32,6 +32,9 @@ export function AppSidebar() {
     case "/dashboard/home":
       homeSelected = true;
       break;
+    case "/dashboard/view-details":
+      homeSelected = true;
+      break;
     case "/dashboard/notifications":
       notiSelected = true;
       break;

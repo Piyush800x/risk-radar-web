@@ -8,6 +8,8 @@ interface Pricing {
   price: number;
   features: string[];
   available: boolean[];
+  colorScheme: string;
+  margin: string;
 }
 
 const pricingPlans: Pricing[] = [
@@ -22,6 +24,8 @@ const pricingPlans: Pricing[] = [
       '"Check Now" Function',
     ],
     available: [true, true, false, false],
+    colorScheme: "bg-transparent",
+    margin: "mt-20",
   },
   {
     planType: "Standard",
@@ -35,6 +39,8 @@ const pricingPlans: Pricing[] = [
       '"Check Now" Function',
     ],
     available: [true, true, true, true],
+    colorScheme: "bg-white/90 hover:bg-white/80 text-black hover:text-black",
+    margin: "mt-2",
   },
   {
     planType: "Premium",
@@ -42,12 +48,14 @@ const pricingPlans: Pricing[] = [
       "For enterprises and security-focused teams managing complex systems",
     price: 24.99,
     features: [
-      "Infinity products",
+      "Infinite products",
       "Vulnerability check every 1 hour",
       "Instant Email Notifications",
       '"Check Now" Function',
     ],
     available: [true, true, true, true],
+    colorScheme: "bg-gradient-to-r from-stone-500 to-neutral-800 text-white",
+    margin: "mt-20",
   },
 ];
 
@@ -55,28 +63,37 @@ export default function Pricing() {
   return (
     <div className="flex justify-center">
       {/* Card div */}
-      <div className="flex justify-center items-center gap-2 h-[650px] ">
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:gird-cols-1 justify-center items-center gap-2  ">
         {pricingPlans.map((plan) => (
-          <div key={plan.planType}>
-            <div className="bg-gradient-to-b w-max h-max p-4 from-neutral-800 to-neutral-900 rounded-2xl border border-zinc-500">
-              {/* Plan type and description */}
-              <div className="flex flex-col gap-3">
-                {/* Plan type text */}
-                <div className="w-max px-7 py-2 rounded-3xl border border-neutral-500 justify-center items-center gap-2.5 inline-flex">
-                  <div className="text-white/80 text-sm font-semibold uppercase">
-                    {plan.planType}
-                  </div>
+          <div
+            key={plan.planType}
+            className={`bg-gradient-to-b w-max ${
+              plan.planType === "Standard"
+                ? "lg:h-[650px] md:h-full sm:h-full"
+                : ""
+            } flex flex-col justify-between p-4 from-neutral-800 to-neutral-900 rounded-2xl border border-zinc-500`}
+          >
+            {/* Plan type and description */}
+            <div className="flex flex-col gap-3">
+              {/* Plan type text */}
+              <div
+                className={`w-max px-7 py-2 ${plan.colorScheme} rounded-3xl border border-neutral-500 justify-center items-center gap-2.5 inline-flex`}
+              >
+                <div className="text-sm font-semibold uppercase">
+                  {plan.planType}
                 </div>
-
-                {/* Description */}
-                <h1 className="w-[350px] text-zinc-400 text-md font-normal">
-                  {plan.description}
-                </h1>
               </div>
 
+              {/* Description */}
+              <h1 className="w-[350px] text-zinc-400 text-md font-normal">
+                {plan.description}
+              </h1>
+            </div>
+
+            <div>
               {/* Price */}
-              <div className="mt-20">
-                <span className="text-white text-5xl font-extrabold ">
+              <div className={plan.margin}>
+                <span className="text-white text-5xl font-bold ">
                   ${plan.price}
                 </span>
                 <span className="text-neutral-400 text-md font-normal">
@@ -99,16 +116,16 @@ export default function Pricing() {
                   </div>
                 ))}
               </div>
+            </div>
 
-              {/* Button for buying */}
-              <div className="w-full mt-20">
-                <Button
-                  variant={"outline"}
-                  className="w-full bg-transparent border border-neutral-500 font-semibold"
-                >
-                  Buy Now
-                </Button>
-              </div>
+            {/* Button for buying */}
+            <div className="w-full mt-20">
+              <Button
+                variant={"outline"}
+                className={`w-full ${plan.colorScheme} border border-neutral-500 font-semibold`}
+              >
+                Buy Now
+              </Button>
             </div>
           </div>
         ))}
