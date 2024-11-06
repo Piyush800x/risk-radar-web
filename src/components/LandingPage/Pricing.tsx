@@ -1,6 +1,12 @@
+'use client';
+
 import { Button } from "../ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { Check, X, Infinity } from "lucide-react";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface Pricing {
   planType: string;
@@ -52,6 +58,21 @@ const pricingPlans: Pricing[] = [
 ];
 
 export default function Pricing() {
+  const {isAuthenticated, user} = useKindeBrowserClient();
+  const router = useRouter();
+
+  const handleSubmit = async (plan: Pricing) => {
+
+    if (isAuthenticated) {
+      sessionStorage.setItem('selectedPlan', JSON.stringify(plan));
+
+      router.push('/checkout');
+    }
+    else {
+      return toast.warning("Please login to purchase a subscription");
+    }
+  }
+
   return (
     <div className="flex justify-center">
       {/* Card div */}
@@ -104,6 +125,7 @@ export default function Pricing() {
               <div className="w-full mt-20">
                 <Button
                   variant={"outline"}
+                  onClick={() => handleSubmit(plan)}
                   className="w-full bg-transparent border border-neutral-500 font-semibold"
                 >
                   Buy Now
