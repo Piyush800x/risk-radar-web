@@ -1,7 +1,8 @@
 'use client';
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import SubscribeButton from "@/components/Stripe/SubscribeButton";
 
 interface Pricing {
     planType: string;
@@ -9,20 +10,25 @@ interface Pricing {
     price: number;
     features: string[];
     available: boolean[];
+    priceId: string;
 }
 
 export default function CheckoutPage() {
     const [pricing, setPricing] = useState<Pricing>();
+    const {user, isAuthenticated} = useKindeBrowserClient();
 
     useEffect(() => {
-        const item = sessionStorage.getItem("selectedPlan")
-        if (item) {
-            setPricing(JSON.parse(item));
+        if (isAuthenticated) {
+            const item = sessionStorage.getItem("selectedPlan")
+            if (item) {
+                setPricing(JSON.parse(item));
+            }
+            else {
+                redirect('/')
+            }
         }
-        else {
-            redirect('/')
-        }
-    }, []);
+        
+    }, [isAuthenticated]);
 
     if (!pricing) {
         return (
@@ -46,7 +52,7 @@ export default function CheckoutPage() {
                 ))}
             </div>
             <h2>Price: {pricing.price}</h2>
-            
+            <SubscribeButton customerEmail={user?.email!} productName={pricing.planType} unitAmount={pricing.price * 100}/>
         </div>
     )
 }

@@ -16,6 +16,7 @@ interface Pricing {
   available: boolean[];
   colorScheme: string;
   margin: string;
+  priceId: string;
 }
 
 const pricingPlans: Pricing[] = [
@@ -32,6 +33,7 @@ const pricingPlans: Pricing[] = [
     available: [true, true, false, false],
     colorScheme: "bg-transparent",
     margin: "mt-20",
+    priceId: "price_1QIPJh09Nu4330lJAwZSHw5P"
   },
   {
     planType: "Standard",
@@ -47,6 +49,7 @@ const pricingPlans: Pricing[] = [
     available: [true, true, true, true],
     colorScheme: "bg-white/90 hover:bg-white/80 text-black hover:text-black",
     margin: "mt-2",
+    priceId: "price_1QIPK409Nu4330lJmUiJrOIy"
   },
   {
     planType: "Premium",
@@ -62,6 +65,7 @@ const pricingPlans: Pricing[] = [
     available: [true, true, true, true],
     colorScheme: "bg-gradient-to-r from-stone-500 to-neutral-800 text-white",
     margin: "mt-20",
+    priceId: "price_1QIPKK09Nu4330lJU0XdDVTO"
   },
 ];
 
@@ -143,6 +147,7 @@ export default function Pricing() {
             <div className="w-full mt-20">
               <Button
                 variant={"outline"}
+                onClick={() => handleSubmit(plan)}
                 className={`w-full ${plan.colorScheme} border border-neutral-500 font-semibold`}
               >
                 Buy Now
