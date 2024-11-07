@@ -55,7 +55,6 @@ export default function Home() {
 
         const res = await req.json();
         setProducts(res);
-        console.log(JSON.stringify(res));
       } catch (error) {
         console.error(error);
       }

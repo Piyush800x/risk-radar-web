@@ -4,29 +4,41 @@ import NotificationCard from "@/components/NotificationCard";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 interface Notification {
+  id: string;
   header: string;
   time: string;
 }
 
 
 export default function Notifications() {
-  const {isAuthenticated, user, isLoading} = useKindeBrowserClient();
+  const {isAuthenticated, user} = useKindeBrowserClient();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const getNotifications = async () => {
-    const req = await fetch('/api/get-notifications', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({"authId": user?.id})
-    });
-
-    const res = await req.json();
-    if (res.success) {
-      setNotifications(res.data.notifications);
-      console.log(JSON.stringify(res.data.notifications));
+    setLoading(true);
+    try {
+      const req = await fetch('/api/get-notifications', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"authId": user?.id})
+      });
+  
+      const res = await req.json();
+      if (res.success) {
+        setNotifications(res.data.notifications);
+        console.log(JSON.stringify(res.data.notifications));
+      }
     }
+    catch (error) {
+      console.error(error);
+    }
+    finally {
+      setLoading(false);
+    }
+    
   };
 
   useEffect(() => {
@@ -34,6 +46,10 @@ export default function Notifications() {
       getNotifications();
     };
   }, [isAuthenticated, user]);
+
+  if (loading) {
+    return <h1>Loading...</h1>
+  }
 
   return (
     <div className="py-4 px-5 flex flex-col">
@@ -54,7 +70,7 @@ export default function Notifications() {
       {/* Notification bars */}
       <div className="m-2 grid grid-cols-1 w-full">
         {notifications.map((notification) => (
-          <NotificationCard title={notification.header} time={notification.time}/>
+          <NotificationCard title={notification.header} time={notification.time} id={notification.id} authEmailId={user?.email!}/>
         ))}
       </div>
     </div>
