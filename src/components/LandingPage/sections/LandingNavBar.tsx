@@ -9,10 +9,23 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   RegisterLink,
   LoginLink,
+  LogoutLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 
 export default function LandingNavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useKindeBrowserClient();
+  const { user } = useKindeBrowserClient();
 
   const handleMenuClick = () => {
     setIsOpen(true);
@@ -48,21 +61,55 @@ export default function LandingNavBar() {
             Pricing
           </h1>
         </Link>
-        <LoginLink className="relative group">
+        <Link href={"/dashboard"} className="relative group">
           <h1 className="after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-300 md:group-hover:after:w-full">
-            Login
+            Dashboard
           </h1>
-        </LoginLink>
+        </Link>
       </div>
 
-      {/* Register button */}
-      <div className="sm:block hidden">
-        <RegisterLink>
-          <Button className="text-sm" size={"sm"}>
-            Register
-          </Button>
-        </RegisterLink>
-      </div>
+      {/* Login and Register button */}
+      {!isAuthenticated ? (
+        <div className="sm:flex items-center gap-4 hidden">
+          <LoginLink className="relative group">
+            <h1 className="after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-300 md:group-hover:after:w-full">
+              Login
+            </h1>
+          </LoginLink>
+          <RegisterLink>
+            <Button className="text-sm" size={"sm"}>
+              Register
+            </Button>
+          </RegisterLink>
+        </div>
+      ) : (
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger className="">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center w-7 h-7 rounded-full bg-[#262626] text-white">
+                    {user?.email?.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="">{user?.email}</span>
+                </div>
+              </NavigationMenuTrigger>
+              <NavigationMenuContent className="flex items-center justify-center w-full">
+                <NavigationMenuLink
+                  className={`${navigationMenuTriggerStyle()} `}
+                >
+                  <LogoutLink
+                    className="text-sm font-medium"
+                    postLogoutRedirectURL="/"
+                  >
+                    Log out
+                  </LogoutLink>
+                </NavigationMenuLink>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      )}
 
       {/* Hamburger icon for mobile screen */}
       <div className="sm:hidden flex" onClick={handleMenuClick}>
