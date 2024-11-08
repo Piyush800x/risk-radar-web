@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
 
     try {
         const user = await collection.findOne({"authId": data.authId});
-        console.log(JSON.stringify(user));
         return NextResponse.json({success: true, data: user});
     }
     catch (error) {

@@ -1,4 +1,3 @@
-// app/api/update-subscription/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { Db, MongoClient } from 'mongodb';
@@ -25,7 +24,7 @@ export async function POST(req: NextRequest) {
       await client.connect();
       await db.collection('userdata').updateOne(
         { authEmailId: session.customer_email },
-        { $set: {"subscription": { subscriptionStatus: 'active', subscriptionId: session.subscription, planType: productName }} }
+        { $set: {"subscription": { subscriptionStatus: 'active', subscriptionId: session.subscription, planType: productName }} }, 
       );
 
       return NextResponse.json({ success: true });

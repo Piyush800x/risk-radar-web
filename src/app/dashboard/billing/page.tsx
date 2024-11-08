@@ -1,7 +1,137 @@
+'use client';
+import { Button } from "@/components/ui/button";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import Stripe from "stripe";
+
+interface CardDetails {
+  brand: string;
+  last4: string;
+  exp_month: number;
+  exp_year: number;
+}
+
+interface BillingMethod {
+  card?: CardDetails;
+  brand?: string;
+  last4: string;
+}
+
+interface SubscriptionResponse {
+  status: string;
+  billingMethod: BillingMethod | null;
+  currentPeriodEnd: number;
+  items: Stripe.SubscriptionItem[];
+}
+
 export default function Billing() {
+  const [subscriptionData, setSubscriptionData] = useState<SubscriptionResponse>();
+  const {isAuthenticated, user} = useKindeBrowserClient();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isRenewing, setIsRenewing] = useState<boolean>(false);
+
+  const fetchSubscriptionData = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/subscription/get-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ authId: user?.id }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(JSON.stringify(data.response));
+        setSubscriptionData(data.response);
+      } else {
+        console.error('Failed to fetch subscription details');
+      }
+    }
+    catch (error) {
+      toast.error("Can't fetch Billing details\nTry again later");
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+
+  const handleSubscriptionCancel = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/subscription/cancel-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ authId: user?.id, subscriptionId: subscriptionData?.items[0].subscription}),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(JSON.stringify(data.response));
+        toast.success(data.message);
+      } else {
+        toast.error("Can't cancel subscription\nTry again later");
+        console.error('Failed to cancel subscription!');
+      }
+    }
+    catch (error) {
+      toast.error("Can't cancel subscription\nTry again later");
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+
+  // const renewSubscription = async () => {
+  //   setIsRenewing(true);
+  //   try {
+  //     const response = await fetch('/api/subscription/renew-subscription', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ subscriptionId: subscriptionData?.items[0].subscription, authId: user?.id }),
+  //     });
+
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setSubscriptionData(prev => prev ? { ...prev, status: "active", currentPeriodEnd: data.currentPeriodEnd } : prev);
+  //       toast.success("Subscription renewed successfully");
+  //     } else {
+  //       toast.error("Failed to renew subscription");
+  //     }
+  //   } catch (error) {
+  //     toast.error("An error occurred. Please try again.");
+  //   } finally {
+  //     setIsRenewing(false);
+  //   }
+  // };
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchSubscriptionData()
+    }
+    
+  }, [isAuthenticated]);
+
+  if (!subscriptionData) {
+    return <h1>Loading...</h1>
+  }
+
   return (
-    <>
-      <h1>Billing</h1>
-    </>
+    <div>
+      <h1>Billing Information</h1>
+      <p>Status: {subscriptionData.status}</p>
+      <p>
+        Billing Method:{' '}
+        {subscriptionData.billingMethod?.brand
+          ? `${subscriptionData.billingMethod.brand} ending in ${subscriptionData.billingMethod.last4}`
+          : 'No billing method found'}
+      </p>
+      <p>Current Period End: {new Date(subscriptionData.currentPeriodEnd * 1000).toLocaleDateString()}</p>
+      {/* {subscriptionData.status ? (<Button onClick={() => renewSubscription()}>Renew Membership</Button>) : (<Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button>) } */}
+      {/* <Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button> */}
+      {subscriptionData.status ? (<Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button>) : (<Button onClick={() => redirect("/pricing")}>Renew Membership</Button>) }
+      
+    </div>
   );
 }
