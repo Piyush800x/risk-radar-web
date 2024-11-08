@@ -3,8 +3,7 @@
 import { Button } from "../ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { Check, X, Infinity } from "lucide-react";
-import { redirect } from "next/navigation";
+import { Check, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 

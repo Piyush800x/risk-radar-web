@@ -10,11 +10,8 @@ export default function Dashboard() {
 
   return (
     <>
-
       {isAuthenticated ? (
-        <div className="flex flex-col gap-4">
-          
-        </div>
+        <div className="flex flex-col gap-4"></div>
       ) : (
         redirect("/")
       )}

@@ -1,6 +1,9 @@
 import { Button } from "../../ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Check, X, Infinity } from "lucide-react";
+import { Check, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { toast } from "sonner";
 
 interface Pricing {
   planType: string;
@@ -10,6 +13,7 @@ interface Pricing {
   available: boolean[];
   colorScheme: string;
   margin: string;
+  priceId: string;
 }
 
 const pricingPlans: Pricing[] = [
@@ -26,6 +30,7 @@ const pricingPlans: Pricing[] = [
     available: [true, true, false, false],
     colorScheme: "bg-transparent",
     margin: "mt-20",
+    priceId: "price_1QIPJh09Nu4330lJAwZSHw5P",
   },
   {
     planType: "Standard",
@@ -41,6 +46,7 @@ const pricingPlans: Pricing[] = [
     available: [true, true, true, true],
     colorScheme: "bg-white/90 hover:bg-white/80 text-black hover:text-black",
     margin: "mt-2",
+    priceId: "price_1QIPK409Nu4330lJmUiJrOIy",
   },
   {
     planType: "Premium",
@@ -56,20 +62,43 @@ const pricingPlans: Pricing[] = [
     available: [true, true, true, true],
     colorScheme: "bg-gradient-to-r from-stone-500 to-neutral-800 text-white",
     margin: "mt-20",
+    priceId: "price_1QIPKK09Nu4330lJU0XdDVTO",
   },
 ];
 
-export default function Pricing() {
+export default function LandingPricing() {
+  const { isAuthenticated } = useKindeBrowserClient();
+  const router = useRouter();
+
+  const handleSubmit = async (plan: Pricing) => {
+    if (isAuthenticated) {
+      sessionStorage.setItem("selectedPlan", JSON.stringify(plan));
+
+      router.push("/checkout");
+    } else {
+      return toast.warning("Please login to purchase a subscription");
+    }
+  };
+
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-col justify-center mt-[150px]">
+      {/* Heading text */}
+      <div>
+        <h1 className="text-neutral-700 sm:text-md font-semibold uppercase">
+          pricing
+        </h1>
+        <h1 className="text-3xl font-semibold bg-gradient-to-r from-[#FFFFFF] to-[#9999998F]/55 bg-clip-text text-transparent">
+          Simple, Transparent Pricing
+        </h1>
+      </div>
       {/* Card div */}
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:gird-cols-1 justify-center items-center gap-2  ">
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:gird-cols-1 justify-center items-center gap-2 mt-8">
         {pricingPlans.map((plan) => (
           <div
             key={plan.planType}
-            className={`bg-gradient-to-b w-max ${
+            className={`bg-gradient-to-b sm:min-w-auto min-w-[100px] ${
               plan.planType === "Standard"
-                ? "lg:h-[650px] md:h-full sm:h-full"
+                ? "lg:h-[650px] w-full md:h-full sm:h-full"
                 : ""
             } flex flex-col justify-between p-4 from-neutral-800 to-neutral-900 rounded-2xl border border-zinc-500`}
           >
@@ -85,7 +114,7 @@ export default function Pricing() {
               </div>
 
               {/* Description */}
-              <h1 className="w-[350px] text-zinc-400 text-md font-normal">
+              <h1 className="sm:w-[350px] text-zinc-400 sm:text-md text-sm font-normal">
                 {plan.description}
               </h1>
             </div>
@@ -93,7 +122,7 @@ export default function Pricing() {
             <div>
               {/* Price */}
               <div className={plan.margin}>
-                <span className="text-white text-5xl font-bold ">
+                <span className="text-white sm:text-5xl text-4xl font-bold ">
                   ${plan.price}
                 </span>
                 <span className="text-neutral-400 text-md font-normal">
@@ -111,7 +140,7 @@ export default function Pricing() {
                   <div key={feature}>
                     <h1 className="flex gap-3">
                       {plan.available[index] ? <Check /> : <X />}
-                      <span>{feature}</span>
+                      <span className="sm:text-base text-sm">{feature}</span>
                     </h1>
                   </div>
                 ))}
@@ -122,6 +151,7 @@ export default function Pricing() {
             <div className="w-full mt-20">
               <Button
                 variant={"outline"}
+                onClick={() => handleSubmit(plan)}
                 className={`w-full ${plan.colorScheme} border border-neutral-500 font-semibold`}
               >
                 Buy Now
