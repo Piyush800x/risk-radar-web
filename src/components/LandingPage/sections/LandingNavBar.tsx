@@ -61,7 +61,7 @@ export default function LandingNavBar() {
             Pricing
           </h1>
         </Link>
-        <Link href={"/dashboard"} className="relative group">
+        <Link href={"/dashboard/home"} className="relative group">
           <h1 className="after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-300 md:group-hover:after:w-full">
             Dashboard
           </h1>
