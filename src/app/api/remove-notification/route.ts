@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const result = await collection.updateOne(
-            { "authEmailId": data.authEmailId },
+            { "authId": data.authId },
             { "$pull": { "notifications": { "id": data.id } } }
         );
         if (result.modifiedCount > 0) {

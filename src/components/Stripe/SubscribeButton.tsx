@@ -8,16 +8,17 @@ interface SubscribeButtonProps {
   customerEmail: string;
   productName: string;
   unitAmount: number;
+  desc: string;
 }
 
-export default function SubscribeButton({ customerEmail, productName, unitAmount }: SubscribeButtonProps)  {
+export default function SubscribeButton({ customerEmail, productName, unitAmount, desc }: SubscribeButtonProps)  {
   const handleSubscription = async () => {
     const response = await fetch('/api/stripe/subscribe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ customerEmail, productName, unitAmount }),
+      body: JSON.stringify({ customerEmail, productName, unitAmount, desc }),
     });
 
     const { id } = await response.json();

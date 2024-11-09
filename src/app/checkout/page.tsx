@@ -90,16 +90,20 @@ export default function CheckoutPage() {
           {/* Subscribe button */}
           <Button>
             <SubscribeButton
-              customerEmail={user?.email!}
+              customerEmail={`${user?.email}`}
               productName={pricing.planType}
               unitAmount={pricing.price * 100}
+              desc={pricing.description}
             />
           </Button>
 
           {/* Plan price */}
           <div>
             <h2 className="text-stone-300 text-xl">Plan price:</h2>
-            <h1 className="text-4xl font-semibold">${pricing.price}<span className="text-2xl text-gray-500">/month</span></h1>
+            <h1 className="text-4xl font-semibold">
+              ${pricing.price}
+              <span className="text-2xl text-gray-500">/month</span>
+            </h1>
           </div>
         </div>
       </div>
