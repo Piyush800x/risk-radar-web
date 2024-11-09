@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(req: NextRequest) {
   const SITE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
   try {
-    const { customerEmail, productName, unitAmount } = await req.json();
+    const { customerEmail, productName, unitAmount, desc } = await req.json();
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
           quantity: 1,
         },
       ],
-      metadata: {productName},
+      metadata: {productName, desc},
       success_url: `${SITE_URL}/checkout/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/pricing`,
     });

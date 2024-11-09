@@ -9,11 +9,17 @@ interface Notification {
   time: string;
 }
 
+interface Products {
+  vendorName: string;
+  productName: string,
+  productVersion: string
+}
 
 export default function Notifications() {
   const {isAuthenticated, user} = useKindeBrowserClient();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [products, setProducts] = useState<Products[]>([]);
 
   const getNotifications = async () => {
     setLoading(true);
@@ -29,6 +35,7 @@ export default function Notifications() {
       const res = await req.json();
       if (res.success) {
         setNotifications(res.data.notifications);
+        setProducts(res.data.products);
         console.log(JSON.stringify(res.data.notifications));
       }
     }
@@ -69,8 +76,8 @@ export default function Notifications() {
 
       {/* Notification bars */}
       <div className="m-2 grid grid-cols-1 w-full">
-        {notifications.map((notification) => (
-          <NotificationCard title={notification.header} time={notification.time} id={notification.id} authEmailId={user?.email!}/>
+        {notifications.map((notification, index) => (
+          <NotificationCard title={notification.header} time={notification.time} id={notification.id} authId={user?.id!} vendorName={products[index].vendorName} productName={products[index].productName} productVersion={products[index].productVersion}/>
         ))}
       </div>
     </div>

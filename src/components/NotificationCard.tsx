@@ -7,21 +7,27 @@ interface notificationDetails {
   id: string;
   title: string;
   time: string;
-  authEmailId: string;
+  authId: string;
+  vendorName: string;
+  productName: string;
+  productVersion: string;
 }
 
 export default function NotificationCard({
   id,
   title,
   time,
-  authEmailId
+  authId,
+  vendorName,
+  productName,
+  productVersion
 }: notificationDetails) {
   const [loading, setLoading] = useState<boolean>(false);
 
   const removeNotification = async (id: string) => {
     setLoading(true);
     const payload = {
-      authEmailId: authEmailId,
+      authId: authId,
       id: id
     }
     
@@ -54,7 +60,7 @@ export default function NotificationCard({
     <div className="flex " key={id}>
       <div className="flex bg-[#F4F4F4] dark:bg-[#2D2D2D] rounded-l-lg border border-[#BCBCBC] dark:border-[#434343] justify-between rounded-tl-lg rounded-bl-lg  px-2 py-1  w-full">
         <div>
-          <h1 className="text-xl font-semibold">{title}</h1>
+          <h1 className="text-xl font-semibold">{title} for {vendorName} - {productName} - {productVersion}</h1>
         </div>
         <div>
           <h1>{time}</h1>

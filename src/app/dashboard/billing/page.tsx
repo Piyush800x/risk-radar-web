@@ -17,6 +17,7 @@ interface BillingMethod {
   card?: CardDetails;
   brand?: string;
   last4: string;
+  country: string;
 }
 
 interface SubscriptionResponse {
@@ -31,6 +32,9 @@ export default function Billing() {
   const {isAuthenticated, user} = useKindeBrowserClient();
   const [loading, setLoading] = useState<boolean>(true);
   const [isRenewing, setIsRenewing] = useState<boolean>(false);
+  const [planType, setPlanType] = useState<string>();
+  const [planDesc, setPlanDesc] = useState<string>();
+  const [invoiceURL, setInvoiceURL] = useState<string>();
 
   const fetchSubscriptionData = async () => {
     setLoading(true);
@@ -45,6 +49,9 @@ export default function Billing() {
         const data = await response.json();
         console.log(JSON.stringify(data.response));
         setSubscriptionData(data.response);
+        setPlanType(data.planType);
+        setPlanDesc(data.desc);
+        setInvoiceURL(data.invoiceURL);
       } else {
         console.error('Failed to fetch subscription details');
       }
@@ -120,6 +127,9 @@ export default function Billing() {
   return (
     <div>
       <h1>Billing Information</h1>
+      <p>Plan: {planType}</p>
+      <p>Desc: {planDesc}</p>
+      <a href={`${invoiceURL}`}>Download Invoice</a>
       <p>Status: {subscriptionData.status}</p>
       <p>
         Billing Method:{' '}
@@ -127,6 +137,9 @@ export default function Billing() {
           ? `${subscriptionData.billingMethod.brand} ending in ${subscriptionData.billingMethod.last4}`
           : 'No billing method found'}
       </p>
+      <p>Amount -- {subscriptionData.items[0].plan.amount}</p>
+      <p>Last invoice Date -- {subscriptionData.items[0].price.created}</p>
+      <p>Country: {subscriptionData.billingMethod?.country}</p>
       <p>Current Period End: {new Date(subscriptionData.currentPeriodEnd * 1000).toLocaleDateString()}</p>
       {/* {subscriptionData.status ? (<Button onClick={() => renewSubscription()}>Renew Membership</Button>) : (<Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button>) } */}
       {/* <Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button> */}

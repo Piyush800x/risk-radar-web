@@ -57,6 +57,9 @@ export async function POST(req: NextRequest) {
             
             return NextResponse.json({
                 response,
+                planType: result.subscription.planType,
+                desc: result.subscription.desc,
+                invoiceURL: result.subscription.invoiceURL,
                 success: true
             });
         }

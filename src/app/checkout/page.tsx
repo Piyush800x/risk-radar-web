@@ -52,7 +52,7 @@ export default function CheckoutPage() {
                 ))}
             </div>
             <h2>Price: {pricing.price}</h2>
-            <SubscribeButton customerEmail={user?.email!} productName={pricing.planType} unitAmount={pricing.price * 100}/>
+            <SubscribeButton customerEmail={user?.email!} productName={pricing.planType} unitAmount={pricing.price * 100} desc={pricing.description}/>
         </div>
     )
 }
