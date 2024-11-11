@@ -9,6 +9,19 @@ import Stripe from "stripe";
 import Link from "next/link";
 import Image from "next/image";
 
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+
+import ChangePlan from "@/components/ChangePlan";
+
 interface CardDetails {
   brand: string;
   last4: string;
@@ -168,7 +181,7 @@ export default function Billing() {
     mastercard: "/card_brands/mastercard.svg",
     "american express": "/card_brands/american.svg",
     discover: "/card_brands/discover.svg",
-    unknown: "/card_brands/unknwon.svg",
+    unknown: "/card_brands/ugnknwon.svg",
   };
 
   const CardLogo: React.FC<CardLogoProps> = ({ brand }) => {
@@ -235,9 +248,26 @@ export default function Billing() {
           <p className="text-zinc-400 sm:w-max w-2/3">{planDesc}</p>
         </div>
         {/* Change plan button */}
-        <div>
-          <Button variant={"secondary"}>Change plan</Button>
-        </div>
+
+        <Drawer>
+          <DrawerTrigger>
+            <Button variant={"secondary"}>Change Plan</Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader className="flex flex-col items-center">
+              <DrawerTitle>Select plan</DrawerTitle>
+              <DrawerDescription>
+                Click on buy now to change your current plan to another one
+              </DrawerDescription>
+            </DrawerHeader>
+            <ChangePlan/>
+            <DrawerFooter>
+              <DrawerClose>
+                <Button variant="outline">Cancel</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
       </div>
 
       {/* period information */}
@@ -309,7 +339,12 @@ export default function Billing() {
             Cancel Membership
           </Button>
         ) : (
-          <Button className="text-yellow-700 dark:text-yellow-500 dark:bg-yellow-900/20 bg-yellow-100" onClick={() => redirect("/pricing")}>Renew Membership</Button>
+          <Button
+            className="text-yellow-700 dark:text-yellow-500 dark:bg-yellow-900/20 bg-yellow-100"
+            onClick={() => redirect("/pricing")}
+          >
+            Renew Membership
+          </Button>
         )}
       </div>
     </div>
