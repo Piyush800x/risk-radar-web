@@ -43,6 +43,8 @@ export default function Billing() {
   const [planType, setPlanType] = useState<string>();
   const [planDesc, setPlanDesc] = useState<string>();
   const [invoiceURL, setInvoiceURL] = useState<string>();
+  const [subscriptionId, setSubscriptionId] = useState<string>();
+  const [cardBrand, setCardBrand] = useState();
 
   const fetchSubscriptionData = async () => {
     setLoading(true);
@@ -60,6 +62,8 @@ export default function Billing() {
         setPlanType(data.planType);
         setPlanDesc(data.desc);
         setInvoiceURL(data.invoiceURL);
+        setSubscriptionId(data.response.items[0].subscription)
+        setCardBrand(data.response.billingMethod.brand)
       } else {
         console.error("Failed to fetch subscription details");
       }
@@ -77,7 +81,7 @@ export default function Billing() {
       year: "numeric",
     }).format(date);
   };
-  const date = new Date();
+  // const date = new Date();
 
   const handleSubscriptionCancel = async () => {
     setLoading(true);
@@ -105,6 +109,25 @@ export default function Billing() {
       setLoading(false);
     }
   };
+
+  // Need to use this in Popup of Change Plan: create ChangePlan.tsx
+  const handleChangePlan = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/subscription/change-plan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          authId: user?.id,
+          subscriptionId: subscriptionData?.items[0].subscription,
+        }),
+      });
+
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
 
   // const renewSubscription = async () => {
   //   setIsRenewing(true);
@@ -165,7 +188,7 @@ export default function Billing() {
     );
   };
 
-  const cardBrand = subscriptionData.billingMethod.brand;
+  // const cardBrand = subscriptionData.billingMethod.brand;
 
   return (
     <div className="py-4 px-8 w-full flex flex-col justify-center gap-8">
@@ -264,7 +287,7 @@ export default function Billing() {
       {/* Card details */}
       <div className="">
         <div className="flex gap-2 items-center">
-          <CardLogo brand={cardBrand} />
+          <CardLogo brand={cardBrand!} />
           <p className="font-medium">
             {subscriptionData.billingMethod?.brand
               ? `**** **** **** ${subscriptionData.billingMethod.last4}`
