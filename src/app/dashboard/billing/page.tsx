@@ -145,6 +145,7 @@ export default function Billing() {
     mastercard: "/card_brands/mastercard.svg",
     "american express": "/card_brands/american.svg",
     discover: "/card_brands/discover.svg",
+    unknown: "/card_brands/unknwon.svg",
   };
 
   const CardLogo: React.FC<CardLogoProps> = ({ brand }) => {
