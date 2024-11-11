@@ -1,10 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Stripe from "stripe";
+import Link from "next/link";
+import Image from "next/image";
 
 interface CardDetails {
   brand: string;
@@ -25,6 +28,10 @@ interface SubscriptionResponse {
   billingMethod: BillingMethod | null;
   currentPeriodEnd: number;
   items: Stripe.SubscriptionItem[];
+}
+
+interface CardLogoProps {
+  brand: string;
 }
 
 export default function Billing() {
@@ -62,6 +69,15 @@ export default function Billing() {
       setLoading(false);
     }
   };
+
+  const formatDate = (date: Date): string => {
+    return new Intl.DateTimeFormat("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }).format(date);
+  };
+  const date = new Date();
 
   const handleSubscriptionCancel = async () => {
     setLoading(true);
@@ -123,8 +139,36 @@ export default function Billing() {
     return <h1>Loading...</h1>;
   }
 
+  // Mapping of card brands to logo image paths
+  const cardLogos: { [key: string]: string } = {
+    visa: "/card_brands/visa.svg",
+    mastercard: "/card_brands/mastercard.svg",
+    "american express": "/card_brands/american.svg",
+    discover: "/card_brands/discover.svg",
+    unknown: "/card_brands/unknwon.svg",
+  };
+
+  const CardLogo: React.FC<CardLogoProps> = ({ brand }) => {
+    const logoPath =
+      cardLogos[brand.toLowerCase()] || "/path/to/default-logo.png";
+
+    return (
+      <div className="flex items-center">
+        <Image
+          src={logoPath}
+          alt={`${brand} logo`}
+          width={40}
+          height={40}
+          className="h-10 w-10"
+        />
+      </div>
+    );
+  };
+
+  const cardBrand = subscriptionData.billingMethod.brand;
+
   return (
-    <div className="py-4 px-5 w-full flex flex-col justify-center">
+    <div className="py-4 px-8 w-full flex flex-col justify-center gap-8">
       {/* Heading text and tab info */}
       <div className="text-neutral-900 text-3xl font-semibold tracking-wide">
         <h1 className="text-neutral-600 text-lg font-semibold dark:invert">
@@ -138,58 +182,113 @@ export default function Billing() {
         </div>
       </div>
 
-      {/* Status and change plan */}
-      <div>
-        {/* Plan type name and status indicator */}
-        <div className="flex items-center gap-2">
-          <p className="text-xl font-semibold">{planType} plan</p>
-          <div
-            className={`w-20 h-8 px-4 py-1 ${
-              subscriptionData.status === "active"
-                ? "bg-green-500/5 border-lime-950"
-                : "bg-red-500/5 border-red-600"
-            } rounded-3xl border  justify-center items-center gap-2.5 inline-flex`}
-          >
-            <h1
-              className={`${
-                subscriptionData.status === "active"
-                  ? "text-green-500"
-                  : "text-red-500"
-              } text-sm font-semibold tracking-tight uppercase`}
-            >
-              {subscriptionData.status}
-            </h1>
+      <div className="flex w-full items-center justify-between">
+        {/* Status and change plan */}
+        <div className="">
+          {/* Plantype name and description */}
+          <div>
+            {/* Plan type name and status indicator */}
+            <div className="flex items-center gap-2">
+              <p className="text-xl font-semibold">{planType} plan</p>
+              <div
+                className={`w-max h-8 px-4 py-1 ${
+                  subscriptionData.status === "active"
+                    ? "bg-green-500/5 dark:border-lime-950"
+                    : "bg-red-500/5 border-red-600"
+                } rounded-3xl border  justify-center items-center gap-2.5 inline-flex`}
+              >
+                <h1
+                  className={`${
+                    subscriptionData.status === "active"
+                      ? "text-green-500"
+                      : "text-red-500"
+                  } text-sm font-semibold tracking-tight uppercase`}
+                >
+                  {subscriptionData.status}
+                </h1>
+              </div>
+            </div>
           </div>
+          <p className="text-zinc-400 sm:w-max w-2/3">{planDesc}</p>
+        </div>
+        {/* Change plan button */}
+        <div>
+          <Button variant={"secondary"}>Change plan</Button>
         </div>
       </div>
 
-      <p>Desc: {planDesc}</p>
-      <a href={`${invoiceURL}`}>Download Invoice</a>
-      <p>Status: {subscriptionData.status}</p>
-      <p>
-        Billing Method:{" "}
-        {subscriptionData.billingMethod?.brand
-          ? `${subscriptionData.billingMethod.brand} ending in ${subscriptionData.billingMethod.last4}`
-          : "No billing method found"}
-      </p>
-      <p>Amount -- {subscriptionData.items[0].plan.amount}</p>
-      <p>Last invoice Date -- {subscriptionData.items[0].price.created}</p>
-      <p>Country: {subscriptionData.billingMethod?.country}</p>
-      <p>
-        Current Period End:{" "}
-        {new Date(
-          subscriptionData.currentPeriodEnd * 1000
-        ).toLocaleDateString()}
-      </p>
+      {/* period information */}
+      <div className="flex justify-between items-center">
+        {/* Period end date */}
+        <div>
+          <p className="text-2xl font-medium">
+            {formatDate(new Date(subscriptionData.currentPeriodEnd * 1000))}
+          </p>
+          <p className="text-neutral-400">Current Period End</p>
+        </div>
+
+        {/* Last invoice date */}
+        <div className="flex flex-col justify-end items-end">
+          <p className="text-2xl font-medium">
+            ${Number(subscriptionData.items[0].plan.amount) / 100}
+          </p>
+          <p className="text-neutral-400">
+            {formatDate(
+              new Date(subscriptionData.items[0].price.created * 1000)
+            )}{" "}
+            - Last invoice
+          </p>
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Acc and card details */}
+      <div className="flex justify-between items-center">
+        {/* Full name and Email */}
+        <div>
+          <p className="sm:text-xl">
+            {user?.given_name} {user?.family_name}
+          </p>
+          <p className="sm:text-lg">{user?.email}</p>
+        </div>
+
+        {/* Invoice download button */}
+        <div>
+          <Link target="_blank" href={`${invoiceURL}`}>
+            <Button variant={"secondary"}> Download Invoice</Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Card details */}
+      <div className="">
+        <div className="flex gap-2 items-center">
+          <CardLogo brand={cardBrand} />
+          <p className="font-medium">
+            {subscriptionData.billingMethod?.brand
+              ? `**** **** **** ${subscriptionData.billingMethod.last4}`
+              : "No billing method found"}
+          </p>
+        </div>
+
+        <p>Country: {subscriptionData.billingMethod?.country}</p>
+      </div>
+
       {/* {subscriptionData.status ? (<Button onClick={() => renewSubscription()}>Renew Membership</Button>) : (<Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button>) } */}
       {/* <Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button> */}
-      {subscriptionData.status ? (
-        <Button onClick={() => handleSubscriptionCancel()}>
-          Cancel Membership
-        </Button>
-      ) : (
-        <Button onClick={() => redirect("/pricing")}>Renew Membership</Button>
-      )}
+      <div className="flex justify-end">
+        {subscriptionData.status ? (
+          <Button
+            className="text-red-500 dark:bg-red-900/20 bg-red-100"
+            onClick={() => handleSubscriptionCancel()}
+          >
+            Cancel Membership
+          </Button>
+        ) : (
+          <Button className="text-yellow-700 dark:text-yellow-500 dark:bg-yellow-900/20 bg-yellow-100" onClick={() => redirect("/pricing")}>Renew Membership</Button>
+        )}
+      </div>
     </div>
   );
 }

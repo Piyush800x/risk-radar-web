@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 interface ResponseData {
   price: string;
@@ -44,25 +46,54 @@ export default function PaymentSuccess() {
 
   return (
     <div className="w-full h-dvh flex justify-center items-center">
-      <div className="relative flex flex-col gap-4 bg-gradient-to-b from-neutral-800 to-neutral-900 rounded-lg shadow border px-8 py-8 border-neutral-600">
+      <div className="relative flex flex-col justify-center items-center gap-4 bg-gradient-to-b from-neutral-800 to-neutral-900 rounded-lg shadow border px-8 py-8 border-neutral-600">
         <Image
           src={"/payment_success/verified.svg"}
           height={200}
           width={200}
           alt="verified icon"
         />
-        <h1>Payment success</h1>
+        <h1 className="text-2xl font-medium">Payment success</h1>
 
         {/* Amount */}
-        <div>
-          <h1>{responseData?.price}</h1>
+        <div className="flex flex-col items-center">
+          <h1 className="text-stone-300 text-md font-normal">Amount</h1>
+          <h1 className="font-semibold text-3xl">
+            ${Number(responseData?.price) / 100}
+          </h1>
         </div>
-        <Button>
-          <a href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/dashboard/home`}>
-            Go to dashboard
-          </a>
-        </Button>
-        <h2>{responseData.planType.productName}</h2>
+        <div className="w-28 h-10 px-7 py-2 rounded-3xl border border-neutral-500 justify-center items-center gap-2.5 inline-flex">
+          <div className="text-white/80 text-md font-semibold uppercase">
+            {responseData.planType.productName}
+          </div>
+        </div>
+        <h2 className="text-stone-300 font-medium ">
+          Your monthly subscription is now active.
+        </h2>
+
+        {/* CTAs */}
+        <div>
+          {/* CTA buttons */}
+          <div className="flex sm:gap-5 gap-1 ">
+            <Link
+              href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/dashboard/home`}
+            >
+              <Button size={"lg"} className="font-semibold">
+                Go to dashboard
+              </Button>
+            </Link>
+            <Link href={responseData.invoiceURL} target="_blank">
+              <Button
+                variant={"secondary"}
+                size={"lg"}
+                className="font-semibold border border-neutral-700 flex items-center gap-1"
+              >
+                <span>Download Invoice</span>
+                <ArrowUpRight />
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
