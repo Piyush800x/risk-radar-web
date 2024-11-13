@@ -7,17 +7,32 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: '2024-10-28.acacia',
 });
 
-
+// Currently not using
 export async function POST(req: NextRequest) {
     const client: MongoClient = await mongoClientPromise;
     const db: Db = client.db("UserData");
     const collection: Collection = db.collection("userdata");
+    let invoiceurl;
   try {
-    const { subscriptionId, newPriceId, authId } = await req.json();
+    const { subscriptionId, newPriceId, authId, desc, planType } = await req.json();
 
     // Retrieve the subscription
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const invoice = await stripe.invoices.list({
+        subscription: subscriptionId,
+        limit: 1
+    });
 
+    if (invoice.data.length > 0) {
+        const latestInvoice = invoice.data[0];
+        invoiceurl = latestInvoice.hosted_invoice_url;
+    } else {
+        invoiceurl = "None";
+        throw new Error('No invoices found for this subscription');
+    }
+
+    console.log(JSON.stringify(invoice));
+    console.log(invoiceurl);
     // Update the subscription to switch to a new price (plan)
     const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
       items: [
@@ -37,8 +52,9 @@ export async function POST(req: NextRequest) {
         $set: {
           "subscription.subscriptionStatus": updatedSubscription.status,
           "subscription.subscriptionId": updatedSubscription.id,
-          "subscription.currentPeriodEnd": updatedSubscription.current_period_end,
-          "subscription.planType": updatedSubscription.items.data[0].price.nickname, // Update with new plan nickname
+          "subscription.planType": planType, // Update with new plan nickname
+          "subscription.desc": desc, 
+          "subscription.invoiceURL": invoiceurl
         }
       }
     );

@@ -66,19 +66,50 @@ const pricingPlans: Pricing[] = [
   },
 ];
 
-export default function ChangePlan() {
+interface Props {
+  authId: string;
+  subscriptionId: string;
+}
+
+export default function ChangePlan({authId, subscriptionId}: Props) {
   const { isAuthenticated } = useKindeBrowserClient();
   const router = useRouter();
 
   const handleSubmit = async (plan: Pricing) => {
     if (isAuthenticated) {
-      sessionStorage.setItem("selectedPlan", JSON.stringify(plan));
+      sessionStorage.setItem('selectedPlan', JSON.stringify(plan));
 
-      router.push("/checkout");
-    } else {
+      router.push('/checkout');
+    }
+    else {
       return toast.warning("Please login to purchase a subscription");
     }
-  };
+  }
+
+  // Not working
+  const handleChangePlan = async (newPriceId: string, desc: string, planType: string) => {
+    try {
+      const response = await fetch("/api/subscription/change-plan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          authId: authId,
+          subscriptionId: subscriptionId,
+          newPriceId: newPriceId,
+          desc: desc,
+          planType: planType
+        }),
+      });
+      
+      const res = await response.json();
+      console.log(JSON.stringify(res));
+
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="w-full flex items-center justify-center">
       {/* Card div */}
@@ -138,6 +169,7 @@ export default function ChangePlan() {
               <Button
                 variant={"outline"}
                 onClick={() => handleSubmit(plan)}
+                // onClick={() => handleChangePlan(plan.priceId, plan.description, plan.planType)}
                 className={`w-full ${plan.colorScheme} border border-neutral-500 font-semibold`}
               >
                 Buy Now

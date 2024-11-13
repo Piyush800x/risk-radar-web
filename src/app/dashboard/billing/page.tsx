@@ -52,13 +52,23 @@ export default function Billing() {
     useState<SubscriptionResponse>();
   const { isAuthenticated, user } = useKindeBrowserClient();
   const [loading, setLoading] = useState<boolean>(true);
-  const [isRenewing, setIsRenewing] = useState<boolean>(false);
+  const [isCancelling, setIsCancelling] = useState<string>("Cancel Membership");
   const [planType, setPlanType] = useState<string>();
   const [planDesc, setPlanDesc] = useState<string>();
   const [invoiceURL, setInvoiceURL] = useState<string>();
   const [subscriptionId, setSubscriptionId] = useState<string>();
   const [cardBrand, setCardBrand] = useState();
+  const [subsStatus, setSubsStatus] = useState<boolean>();
 
+  const getSubscriptioStatus = async (data: SubscriptionResponse) => {
+    if (data?.status == "active") {
+      setSubsStatus(true)
+    }
+    else {
+      setSubsStatus(false);
+    }
+  };
+  
   const fetchSubscriptionData = async () => {
     setLoading(true);
     try {
@@ -77,6 +87,7 @@ export default function Billing() {
         setInvoiceURL(data.invoiceURL);
         setSubscriptionId(data.response.items[0].subscription)
         setCardBrand(data.response.billingMethod.brand)
+        getSubscriptioStatus(data.response);
       } else {
         console.error("Failed to fetch subscription details");
       }
@@ -98,6 +109,7 @@ export default function Billing() {
 
   const handleSubscriptionCancel = async () => {
     setLoading(true);
+    setIsCancelling("Cancelling...");
     try {
       const response = await fetch("/api/subscription/cancel-subscription", {
         method: "POST",
@@ -120,27 +132,11 @@ export default function Billing() {
       toast.error("Can't cancel subscription\nTry again later");
     } finally {
       setLoading(false);
+      setIsCancelling("Cancel Membership");
     }
   };
 
   // Need to use this in Popup of Change Plan: create ChangePlan.tsx
-  const handleChangePlan = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/subscription/change-plan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          authId: user?.id,
-          subscriptionId: subscriptionData?.items[0].subscription,
-        }),
-      });
-
-    }
-    catch (error) {
-      console.error(error);
-    }
-  }
 
   // const renewSubscription = async () => {
   //   setIsRenewing(true);
@@ -260,7 +256,7 @@ export default function Billing() {
                 Click on buy now to change your current plan to another one
               </DrawerDescription>
             </DrawerHeader>
-            <ChangePlan/>
+            <ChangePlan authId={user?.id!} subscriptionId={subscriptionData.items[0].subscription}/>
             <DrawerFooter>
               <DrawerClose>
                 <Button variant="outline">Cancel</Button>
@@ -331,7 +327,7 @@ export default function Billing() {
       {/* {subscriptionData.status ? (<Button onClick={() => renewSubscription()}>Renew Membership</Button>) : (<Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button>) } */}
       {/* <Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button> */}
       <div className="flex justify-end">
-        {subscriptionData.status ? (
+        {subsStatus ? (
           <Button
             className="text-red-500 dark:bg-red-900/20 bg-red-100"
             onClick={() => handleSubscriptionCancel()}
@@ -339,12 +335,7 @@ export default function Billing() {
             Cancel Membership
           </Button>
         ) : (
-          <Button
-            className="text-yellow-700 dark:text-yellow-500 dark:bg-yellow-900/20 bg-yellow-100"
-            onClick={() => redirect("/pricing")}
-          >
-            Renew Membership
-          </Button>
+          <div></div>
         )}
       </div>
     </div>
