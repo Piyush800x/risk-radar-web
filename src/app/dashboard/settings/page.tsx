@@ -75,7 +75,7 @@ export default function Settings() {
     if (isAuthenticated) {
       fetchSubscriptionData();
     }
-  }, [isAuthenticated, emailingStatus]);
+  }, [isAuthenticated]);
 
   if (!subscriptionData) {
     return <div>Loading...</div>
@@ -84,7 +84,7 @@ export default function Settings() {
   return (
     <>
       <h1>Settings</h1>
-      <EmailNotificationButton authId={user?.id!} status={!emailingStatus!} activeStatus={emailingStatus!}/>
+      <EmailNotificationButton authId={user?.id!} planType={planType!} status={!emailingStatus!} activeStatus={emailingStatus!}/>
     </>
   );
 }

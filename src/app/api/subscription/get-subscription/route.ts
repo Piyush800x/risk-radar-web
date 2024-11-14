@@ -65,12 +65,12 @@ export async function POST(req: NextRequest) {
             });
         }
         else {
-            NextResponse.json({success: false, message: "Data not found in db"});
+            return NextResponse.json({success: false, message: "Data not found in db"}, {status: 400});
         }
         
     }
     catch (error) {
-        return NextResponse.json({success: false, message: error});
+        return NextResponse.json({success: false, message: error}, {status: 500});
     }
 
 }
