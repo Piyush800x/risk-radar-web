@@ -60,6 +60,7 @@ export async function POST(req: NextRequest) {
                 planType: result.subscription.planType,
                 desc: result.subscription.desc,
                 invoiceURL: result.subscription.invoiceURL,
+                emailingStatus: result.emailingStatus,
                 success: true
             });
         }
