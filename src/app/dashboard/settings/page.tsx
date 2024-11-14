@@ -82,9 +82,28 @@ export default function Settings() {
   }
 
   return (
-    <>
-      <h1>Settings</h1>
-      <EmailNotificationButton authId={user?.id!} planType={planType!} status={!emailingStatus!} activeStatus={emailingStatus!}/>
-    </>
+    <div className="py-4 px-5 w-full flex flex-col justify-center">
+      <h1 className="text-neutral-600 text-lg font-semibold dark:invert">
+        Settings
+      </h1>
+      <div className="mt-6">
+        <div className="flex justify-between items-center text-neutral-900 text-3xl font-semibold tracking-wide">
+          <span className="dark:text-white">Welcome, {user?.given_name}</span>
+        </div>
+        <span className="text-neutral-700 text-lg font-medium tracking-wide dark:invert">
+          Manage your all settings here
+        </span>
+      </div>
+
+      <div className="flex justify-between items-center my-4 py-3 px-4 bg-[#F4F4F4] dark:bg-[#151515] rounded-lg border border-[#BCBCBC] dark:border-[#353535]">
+        <h1 className="text-lg font-medium">Email notifications</h1>
+        <EmailNotificationButton
+          authId={user?.id!}
+          planType={planType!}
+          status={!emailingStatus!}
+          activeStatus={emailingStatus!}
+        />
+      </div>
+    </div>
   );
 }
