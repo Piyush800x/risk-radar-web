@@ -7,11 +7,17 @@ interface EmailNotificationProps {
     authId: string;
     status: boolean;
     activeStatus: boolean;
+    planType: string;
 }
 
-export default function EmailNotificationButton({authId, status, activeStatus}: EmailNotificationProps) {
+export default function EmailNotificationButton({authId, status, activeStatus, planType}: EmailNotificationProps) {
     const [loading, setLoading] = useState<boolean>(false);
     const [emailingStatus, setEmailingStatus] = useState<boolean>(activeStatus);
+    const btnState = (planType == "Standard" || planType == "Premium" ? false : true);
+
+    // if (planType == "Standard" || planType == "Premium" ) {
+    //     setBtnState(false);
+    // }
 
     const setNotification = async () => {
         setLoading(true);
@@ -51,7 +57,7 @@ export default function EmailNotificationButton({authId, status, activeStatus}: 
     return (
         <div>
             <h1>Email Notification</h1>
-            <Button onClick={() => setNotification()} disabled={loading}>Toggle</Button>
+            <Button onClick={() => setNotification()} disabled={btnState}>Toggle</Button>
         </div>
     )
 }
