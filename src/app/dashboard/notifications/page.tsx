@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useEffect, useState } from "react";
 import NotificationCard from "@/components/NotificationCard";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
@@ -11,12 +11,12 @@ interface Notification {
 
 interface Products {
   vendorName: string;
-  productName: string,
-  productVersion: string
+  productName: string;
+  productVersion: string;
 }
 
 export default function Notifications() {
-  const {isAuthenticated, user} = useKindeBrowserClient();
+  const { isAuthenticated, user } = useKindeBrowserClient();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [products, setProducts] = useState<Products[]>([]);
@@ -24,38 +24,35 @@ export default function Notifications() {
   const getNotifications = async () => {
     setLoading(true);
     try {
-      const req = await fetch('/api/get-notifications', {
+      const req = await fetch("/api/get-notifications", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({"authId": user?.id})
+        body: JSON.stringify({ authId: user?.id }),
       });
-  
+
       const res = await req.json();
       if (res.success) {
         setNotifications(res.data.notifications);
         setProducts(res.data.products);
         console.log(JSON.stringify(res.data.notifications));
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
-    
   };
 
   useEffect(() => {
     if (isAuthenticated) {
       getNotifications();
-    };
+    }
   }, [isAuthenticated, user]);
 
   if (loading) {
-    return <h1>Loading...</h1>
+    return <h1>Loading...</h1>;
   }
 
   return (
@@ -64,20 +61,26 @@ export default function Notifications() {
       <h1 className="text-neutral-600 text-lg font-semibold dark:invert">
         Notifications
       </h1>
-      <div className="mt-6 ">
-        <span className="text-neutral-900 text-3xl font-extrabold tracking-wide dark:text-white">
-          Welcome, Mr. {user?.family_name}
-          <br />
-        </span>
+      <div className="mt-6 flex flex-col text-neutral-900 text-3xl">
+        <span className="dark:text-white font-semibold">Welcome, {user?.given_name}</span>
         <span className="text-neutral-700 text-lg font-medium tracking-wide dark:invert">
           See all your notifications here
         </span>
       </div>
 
       {/* Notification bars */}
-      <div className="m-2 grid grid-cols-1 w-full">
+      <div className="m-2 grid grid-cols-1 gap-2 w-full">
         {notifications.map((notification, index) => (
-          <NotificationCard title={notification.header} time={notification.time} id={notification.id} authId={user?.id!} vendorName={products[index].vendorName} productName={products[index].productName} productVersion={products[index].productVersion}/>
+          <NotificationCard
+            title={notification.header}
+            time={notification.time}
+            id={notification.id}
+            authId={user?.id!}
+            vendorName={products[index].vendorName}
+            productName={products[index].productName}
+            productVersion={products[index].productVersion}
+            key={user?.id}
+          />
         ))}
       </div>
     </div>

@@ -52,15 +52,17 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarHeader>
-          <Image
-            src={"/main_logo.svg"}
-            height={200}
-            width={200}
-            alt="main logo"
-            className={`${
-              state === "collapsed" ? "hidden" : ""
-            } ml-3 mt-3 dark:invert`}
-          />
+          <Link href={"/"}>
+            <Image
+              src={"/main_logo.svg"}
+              height={200}
+              width={200}
+              alt="main logo"
+              className={`${
+                state === "collapsed" ? "hidden" : ""
+              } ml-3 mt-3 dark:invert`}
+            />
+          </Link>
         </SidebarHeader>
         <SidebarGroup>
           <SidebarGroupLabel className="uppercase font-semibold">
