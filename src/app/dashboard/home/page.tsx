@@ -67,33 +67,6 @@ export default function Home() {
     setIsVisible(!isVisible);
   };
 
-  const checkuser = async () => {
-    setLoading(true);
-    const userData = {
-      authId: user?.id, 
-      authEmailId: user?.email, 
-      userFirstName: user?.given_name,
-      userLastName: user?.family_name,
-    }
-
-    try {
-      const req = await fetch('/api/check-user', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(userData)
-      });
-
-      await req.json(); 
-    }
-    catch (error) {
-      console.error(error);
-    }
-    finally {
-      setLoading(false);
-    }
-  }
 
   if (loading) {
     return (

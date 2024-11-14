@@ -14,16 +14,6 @@ interface Notification {
     time: string;
 }
 
-interface User {
-    _id: ObjectId;
-    authId: string;
-    authEmailId: string;
-    userFirstName: string;
-    userLastName: string;
-    products: Products[];
-    notifications: Notification[];
-}
-
 interface UserDocument {
     authEmailId: string;
     notifications: Notification[];

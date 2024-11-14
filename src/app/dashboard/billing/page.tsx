@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Stripe from "stripe";
@@ -52,7 +51,6 @@ export default function Billing() {
     useState<SubscriptionResponse>();
   const { isAuthenticated, user } = useKindeBrowserClient();
   const [loading, setLoading] = useState<boolean>(true);
-  const [isCancelling, setIsCancelling] = useState<string>("Cancel Membership");
   const [planType, setPlanType] = useState<string>();
   const [planDesc, setPlanDesc] = useState<string>();
   const [invoiceURL, setInvoiceURL] = useState<string>();
@@ -109,7 +107,6 @@ export default function Billing() {
 
   const handleSubscriptionCancel = async () => {
     setLoading(true);
-    setIsCancelling("Cancelling...");
     try {
       const response = await fetch("/api/subscription/cancel-subscription", {
         method: "POST",
@@ -132,7 +129,6 @@ export default function Billing() {
       toast.error("Can't cancel subscription\nTry again later");
     } finally {
       setLoading(false);
-      setIsCancelling("Cancel Membership");
     }
   };
 

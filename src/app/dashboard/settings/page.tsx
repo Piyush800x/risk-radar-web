@@ -31,20 +31,21 @@ export default function Settings() {
   const {user, isAuthenticated} = useKindeBrowserClient();
   const [loading, setLoading] = useState<boolean>(true);
   const [planType, setPlanType] = useState<string>();
-  const [planDesc, setPlanDesc] = useState<string>();
-  const [subsStatus, setSubsStatus] = useState<boolean>();
+  // const [planDesc, setPlanDesc] = useState<string>();
+  // const [subsStatus, setSubsStatus] = useState<boolean>();
   const [emailingStatus, setEmailingStatus] = useState<boolean>();
 
-  const getSubscriptioStatus = async (data: SubscriptionResponse) => {
-    if (data?.status == "active") {
-      setSubsStatus(true)
-    }
-    else {
-      setSubsStatus(false);
-    }
-  };
+  // const getSubscriptioStatus = async (data: SubscriptionResponse) => {
+  //   if (data?.status == "active") {
+  //     setSubsStatus(true)
+  //   }
+  //   else {
+  //     setSubsStatus(false);
+  //   }
+  // };
 
   const fetchSubscriptionData = async () => {
+    console.log(loading);
     setLoading(true);
     try {
       const response = await fetch("/api/subscription/get-subscription", {
@@ -58,8 +59,8 @@ export default function Settings() {
         console.log(JSON.stringify(data));
         setSubscriptionData(data.response);
         setPlanType(data.planType);
-        setPlanDesc(data.desc);
-        getSubscriptioStatus(data.response);
+        // setPlanDesc(data.desc);
+        // getSubscriptioStatus(data.response);
         setEmailingStatus(data.emailingStatus);
       } else {
         console.error("Failed to fetch subscription details");
