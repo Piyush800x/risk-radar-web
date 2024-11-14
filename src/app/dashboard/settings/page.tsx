@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import Stripe from "stripe";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
@@ -6,29 +6,30 @@ import { toast } from "sonner";
 import EmailNotificationButton from "@/components/Settings/EmailNotificationButton";
 
 interface CardDetails {
-    brand: string;
-    last4: string;
-    exp_month: number;
-    exp_year: number;
+  brand: string;
+  last4: string;
+  exp_month: number;
+  exp_year: number;
 }
 
 interface BillingMethod {
-    card?: CardDetails;
-    brand?: string;
-    last4: string;
-    country: string;
+  card?: CardDetails;
+  brand?: string;
+  last4: string;
+  country: string;
 }
 
 interface SubscriptionResponse {
-    status: string;
-    billingMethod: BillingMethod | null;
-    currentPeriodEnd: number;
-    items: Stripe.SubscriptionItem[];
+  status: string;
+  billingMethod: BillingMethod | null;
+  currentPeriodEnd: number;
+  items: Stripe.SubscriptionItem[];
 }
 
 export default function Settings() {
-  const [subscriptionData, setSubscriptionData] = useState<SubscriptionResponse>();
-  const {user, isAuthenticated} = useKindeBrowserClient();
+  const [subscriptionData, setSubscriptionData] =
+    useState<SubscriptionResponse>();
+  const { user, isAuthenticated } = useKindeBrowserClient();
   const [loading, setLoading] = useState<boolean>(true);
   const [planType, setPlanType] = useState<string>();
   const [planDesc, setPlanDesc] = useState<string>();
@@ -37,9 +38,8 @@ export default function Settings() {
 
   const getSubscriptioStatus = async (data: SubscriptionResponse) => {
     if (data?.status == "active") {
-      setSubsStatus(true)
-    }
-    else {
+      setSubsStatus(true);
+    } else {
       setSubsStatus(false);
     }
   };
@@ -78,13 +78,17 @@ export default function Settings() {
   }, [isAuthenticated, emailingStatus]);
 
   if (!subscriptionData) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   return (
     <>
       <h1>Settings</h1>
-      <EmailNotificationButton authId={user?.id!} status={!emailingStatus!} activeStatus={emailingStatus!}/>
+      <EmailNotificationButton
+        authId={user?.id!}
+        status={!emailingStatus!}
+        activeStatus={emailingStatus!}
+      />
     </>
   );
 }
