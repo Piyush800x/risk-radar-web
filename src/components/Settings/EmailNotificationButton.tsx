@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { Switch } from "../ui/switch";
 
@@ -8,25 +7,26 @@ interface EmailNotificationProps {
   authId: string;
   status: boolean;
   activeStatus: boolean;
-  planType: string;
+  btnState: boolean;
 }
 
 export default function EmailNotificationButton({
   authId,
   status,
   activeStatus,
-  planType,
+  btnState,
 }: EmailNotificationProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [emailingStatus, setEmailingStatus] = useState<boolean>(activeStatus);
-  const btnState =
-    planType == "Standard" || planType == "Premium" ? false : true;
+  // const btnState =
+  //   planType == "Standard" || planType == "Premium" ? false : true;
 
   // if (planType == "Standard" || planType == "Premium" ) {
   //     setBtnState(false);
   // }
 
   const setNotification = async () => {
+    console.log(loading);
     setLoading(true);
     try {
       const req = await fetch("/api/settings/set-emailing", {
@@ -61,6 +61,7 @@ export default function EmailNotificationButton({
       <Switch
         checked={emailingStatus}
         onCheckedChange={() => setNotification()}
+        disabled={btnState}
       />
       {/* <Button onClick={() => setNotification()} disabled={btnState}>Toggle</Button> */}
     </div>

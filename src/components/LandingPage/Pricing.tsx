@@ -69,7 +69,7 @@ const pricingPlans: Pricing[] = [
 ];
 
 export default function Pricing() {
-  const {isAuthenticated, user} = useKindeBrowserClient();
+  const {isAuthenticated} = useKindeBrowserClient();
   const router = useRouter();
 
   const handleSubmit = async (plan: Pricing) => {

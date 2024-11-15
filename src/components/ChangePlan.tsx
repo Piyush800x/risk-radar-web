@@ -66,12 +66,12 @@ const pricingPlans: Pricing[] = [
   },
 ];
 
-interface Props {
-  authId: string;
-  subscriptionId: string;
-}
+// interface Props {
+//   authId: string;
+//   subscriptionId: string;
+// }
 
-export default function ChangePlan({authId, subscriptionId}: Props) {
+export default function ChangePlan() {
   const { isAuthenticated } = useKindeBrowserClient();
   const router = useRouter();
 
@@ -87,28 +87,28 @@ export default function ChangePlan({authId, subscriptionId}: Props) {
   }
 
   // Not working
-  const handleChangePlan = async (newPriceId: string, desc: string, planType: string) => {
-    try {
-      const response = await fetch("/api/subscription/change-plan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          authId: authId,
-          subscriptionId: subscriptionId,
-          newPriceId: newPriceId,
-          desc: desc,
-          planType: planType
-        }),
-      });
+  // const handleChangePlan = async (newPriceId: string, desc: string, planType: string) => {
+  //   try {
+  //     const response = await fetch("/api/subscription/change-plan", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         authId: authId,
+  //         subscriptionId: subscriptionId,
+  //         newPriceId: newPriceId,
+  //         desc: desc,
+  //         planType: planType
+  //       }),
+  //     });
       
-      const res = await response.json();
-      console.log(JSON.stringify(res));
+  //     const res = await response.json();
+  //     console.log(JSON.stringify(res));
 
-    }
-    catch (error) {
-      console.error(error);
-    }
-  }
+  //   }
+  //   catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   return (
     <div className="w-full flex items-center justify-center">

@@ -25,6 +25,7 @@ export default function NotificationCard({
   const [loading, setLoading] = useState<boolean>(false);
 
   const removeNotification = async (id: string) => {
+    console.log(loading);
     setLoading(true);
     const payload = {
       authId: authId,

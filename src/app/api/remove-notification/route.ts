@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoClientPromise from "@/lib/mongodb";
-import { MongoClient, Db, Collection, ObjectId } from "mongodb";
+import { MongoClient, Db, Collection } from "mongodb";
 
-interface Products {
-    vendorName: string;
-    productName: string,
-    productVersion: string
-}
 
 interface Notification {
     id: string;

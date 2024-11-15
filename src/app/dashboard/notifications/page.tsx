@@ -75,7 +75,7 @@ export default function Notifications() {
             title={notification.header}
             time={notification.time}
             id={notification.id}
-            authId={user?.id!}
+            authId={user?.id ? user.id : ""}
             vendorName={products[index].vendorName}
             productName={products[index].productName}
             productVersion={products[index].productVersion}

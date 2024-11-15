@@ -54,7 +54,7 @@ export default function Billing() {
   const [planType, setPlanType] = useState<string>();
   const [planDesc, setPlanDesc] = useState<string>();
   const [invoiceURL, setInvoiceURL] = useState<string>();
-  const [subscriptionId, setSubscriptionId] = useState<string>();
+  // const [subscriptionId, setSubscriptionId] = useState<string>();
   const [cardBrand, setCardBrand] = useState();
   const [subsStatus, setSubsStatus] = useState<boolean>();
 
@@ -68,6 +68,7 @@ export default function Billing() {
   };
   
   const fetchSubscriptionData = async () => {
+    console.log(loading);
     setLoading(true);
     try {
       const response = await fetch("/api/subscription/get-subscription", {
@@ -83,7 +84,7 @@ export default function Billing() {
         setPlanType(data.planType);
         setPlanDesc(data.desc);
         setInvoiceURL(data.invoiceURL);
-        setSubscriptionId(data.response.items[0].subscription)
+        // setSubscriptionId(data.response.items[0].subscription)
         setCardBrand(data.response.billingMethod.brand)
         getSubscriptioStatus(data.response);
       } else {
@@ -217,7 +218,7 @@ export default function Billing() {
           <div>
             {/* Plan type name and status indicator */}
             <div className="flex items-center gap-2">
-              <p className="text-xl font-semibold">{planType} plan</p>
+              <p className="text-xl font-semibold">{planType} Plan</p>
               <div
                 className={`w-max h-8 px-4 py-1 ${
                   subscriptionData.status === "active"
@@ -252,7 +253,7 @@ export default function Billing() {
                 Click on buy now to change your current plan to another one
               </DrawerDescription>
             </DrawerHeader>
-            <ChangePlan authId={user?.id!} subscriptionId={subscriptionData.items[0].subscription}/>
+            <ChangePlan/>
             <DrawerFooter>
               <DrawerClose>
                 <Button variant="outline">Cancel</Button>

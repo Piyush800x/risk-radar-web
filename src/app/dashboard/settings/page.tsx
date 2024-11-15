@@ -31,12 +31,11 @@ export default function Settings() {
     useState<SubscriptionResponse>();
   const { user, isAuthenticated } = useKindeBrowserClient();
   const [loading, setLoading] = useState<boolean>(true);
-  const [planType, setPlanType] = useState<string>();
+  // const [planType, setPlanType] = useState<string>();
   // const [planDesc, setPlanDesc] = useState<string>();
   // const [subsStatus, setSubsStatus] = useState<boolean>();
   const [emailingStatus, setEmailingStatus] = useState<boolean>();
-
-
+  const [btnState, setBtnState] = useState<boolean>(false);
   // const getSubscriptioStatus = async (data: SubscriptionResponse) => {
   //   if (data?.status == "active") {
   //     setSubsStatus(true)
@@ -60,7 +59,8 @@ export default function Settings() {
         const data = await response.json();
         console.log(JSON.stringify(data));
         setSubscriptionData(data.response);
-        setPlanType(data.planType);
+        // setPlanType(data.planType);
+        setBtnState(data.planType == "Standard" || data.planType == "Premium" ? false : true)
         // setPlanDesc(data.desc);
         // getSubscriptioStatus(data.response);
         setEmailingStatus(data.emailingStatus);
@@ -101,8 +101,8 @@ export default function Settings() {
       <div className="flex justify-between items-center my-4 py-3 px-4 bg-[#F4F4F4] dark:bg-[#151515] rounded-lg border border-[#BCBCBC] dark:border-[#353535]">
         <h1 className="text-lg font-medium">Email notifications</h1>
         <EmailNotificationButton
-          authId={user?.id!}
-          planType={planType!}
+          btnState={btnState}
+          authId={user?.id ? user.id : ""}
           status={!emailingStatus!}
           activeStatus={emailingStatus!}
         />
