@@ -52,7 +52,11 @@ export default function Notifications() {
   }, [isAuthenticated, user]);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="py-4 px-5 w-full flex flex-col justify-center">
+        
+      </div>
+    )
   }
 
   return (

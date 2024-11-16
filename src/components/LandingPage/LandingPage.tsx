@@ -23,9 +23,15 @@ export function LandingPage() {
           {/* <NavBar /> */}
           <LandingNavBar />
           <Hero />
-          <Features />
-          <Trust />
-          <LandingPricing />
+          <div id="features">
+            <Features />
+          </div>
+          <div id="trust">
+            <Trust />
+          </div>
+          <div id="pricing">
+            <LandingPricing />
+          </div>
           <Faq />
         </div>
         <Footer />
