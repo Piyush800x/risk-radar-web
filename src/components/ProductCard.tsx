@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { toast } from "sonner";
 import { Trash2, LoaderCircle } from "lucide-react";
