@@ -9,6 +9,7 @@ import { Search } from "lucide-react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { Skeleton } from "@/components/ui/skeleton";
 
+
 interface CVEData {
   _id: string;
   vendorName: string;
@@ -100,7 +101,7 @@ export default function Home() {
       {isVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
           <div className="fixed bg-[#F4F4F4] dark:bg-[#2D2D2D] p-7 rounded-lg shadow-lg flex flex-col w-[50%]">
-            <h2 className="text-xl font-bold">Add a New Product</h2>
+            <h2 className="text-xl font-semibold">Add a New Product</h2>
             <p className="text-sm mb-4">
               To add a product, search for each given properties in the fields
               and select from the dropdown menu, then click Add.
@@ -108,7 +109,7 @@ export default function Home() {
             <AddProduct3 />
             <button
               onClick={toggleComponent}
-              className="absolute top-0 right-0 mt-2 mr-2 px-4 py-2 bg-[#F4F4F4] hover:bg-red-600 hover:text-white text-black font-bold rounded-full border transform translate-x-1/2 -translate-y-1/2"
+              className="absolute top-0 w-10 h-10 justify-center right-0 mt-2 mr-2  bg-[#F4F4F4] hover:bg-red-600 hover:text-white text-black font-bold rounded-full transition-all duration-200 transform translate-x-1/2 -translate-y-1/2"
               title="Closing will reset all fields!"
             >
               &#x2715;
@@ -120,7 +121,7 @@ export default function Home() {
         Home
       </h1>
       <div className="mt-6">
-        <div className="flex justify-between items-center text-neutral-900 text-3xl font-semibold tracking-wide">
+        <div className="flex justify-between items-center text-neutral-900 text-3xl font-medium tracking-wide">
           <span className="dark:text-white">Welcome, {user?.given_name}</span>
 
           <div className="w-1/4 flex items-center relative">
@@ -148,7 +149,7 @@ export default function Home() {
               height={60}
               alt="plus icon"
             />
-            <h1 className="text-lg font-semibold">Add Product</h1>
+            <h1 className="text-lg font-medium">Add Product</h1>
           </div>
           {products && products.length > 0 ? (
             products.map((product: CVEData) => (
