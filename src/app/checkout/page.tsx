@@ -20,6 +20,11 @@ interface Pricing {
 export default function CheckoutPage() {
   const [pricing, setPricing] = useState<Pricing>();
   const { user, isAuthenticated } = useKindeBrowserClient();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+  }
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -38,6 +43,10 @@ export default function CheckoutPage() {
         <Skeleton className="h-[520px] w-[800px]"/>
       </div>
     )
+  }
+
+  if (loading) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -93,7 +102,7 @@ export default function CheckoutPage() {
         {/* Plan price and button */}
         <div className="w-full flex justify-between items-center">
           {/* Subscribe button */}
-          <Button>
+          <Button onClick={() => handleSubmit}>
             <SubscribeButton
               customerEmail={`${user?.email}`}
               productName={pricing.planType}
