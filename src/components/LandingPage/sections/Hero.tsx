@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs";
 
 export default function Hero() {
   return (
@@ -30,13 +31,16 @@ export default function Hero() {
             See Plans
           </Button>
         </Link>
-        <Button
-          variant={"secondary"}
-          size={"lg"}
-          className="font-semibold border border-neutral-700"
-        >
-          Get Started
-        </Button>
+
+        <RegisterLink>
+          <Button
+            variant={"secondary"}
+            size={"lg"}
+            className="font-semibold border border-neutral-700"
+          >
+            Get Started
+          </Button>
+        </RegisterLink>
       </div>
 
       {/* Gradient */}

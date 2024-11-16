@@ -3,10 +3,11 @@ import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import SubscribeButton from "@/components/Stripe/SubscribeButton";
-import { Check, X } from "lucide-react";
+import { Check, X, LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 interface Pricing {
   planType: string;
@@ -24,7 +25,7 @@ export default function CheckoutPage() {
 
   const handleSubmit = async () => {
     setLoading(true);
-  }
+  };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -35,18 +36,23 @@ export default function CheckoutPage() {
         redirect("/");
       }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, loading]);
 
   if (!pricing) {
     return (
       <div className="w-full h-dvh flex justify-center items-center">
-        <Skeleton className="h-[520px] w-[800px]"/>
+        <Skeleton className="h-[520px] w-[800px]" />
       </div>
-    )
+    );
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div className="h-screen w-full flex gap-2 justify-center items-center">
+        <h1 className="text-xl">Redirecting you to payment gateway, do not refresh this page</h1>
+        <LoaderCircle className="animate-spin"/>
+      </div>
+    )
   }
 
   return (
@@ -102,7 +108,7 @@ export default function CheckoutPage() {
         {/* Plan price and button */}
         <div className="w-full flex justify-between items-center">
           {/* Subscribe button */}
-          <Button onClick={() => handleSubmit}>
+          <Button onClick={handleSubmit}>
             <SubscribeButton
               customerEmail={`${user?.email}`}
               productName={pricing.planType}
