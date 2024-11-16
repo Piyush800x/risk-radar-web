@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { LandingPage } from "@/components/LandingPage/LandingPage";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { Loader } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);

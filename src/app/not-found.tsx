@@ -3,7 +3,6 @@
 import Footer from "@/components/LandingPage/sections/Footer";
 import LandingNavBar from "@/components/LandingPage/sections/LandingNavBar";
 import { useTheme } from "next-themes";
-import Image from "next/image";
 
 export default function NotFound() {
   const { setTheme } = useTheme();

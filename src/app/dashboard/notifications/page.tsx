@@ -96,7 +96,7 @@ export default function Notifications() {
         <div>No notifications</div>
       ) : (
         <div className="m-2 grid grid-cols-1 gap-2 w-full">
-          {notifications.map((notification, index) => (
+          {notifications.map((notification) => (
             <NotificationCard
               title={notification.header}
               time={notification.time}
