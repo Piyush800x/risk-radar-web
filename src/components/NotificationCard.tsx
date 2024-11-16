@@ -50,6 +50,7 @@ export default function NotificationCard({
       toast.error("Can't remove notification\nPlease try again!");
     } finally {
       setLoading(false);
+      window.location.reload()
     }
   };
 

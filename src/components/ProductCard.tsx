@@ -3,10 +3,22 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { toast } from "sonner";
 import { Trash2, LoaderCircle } from "lucide-react";
 import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Props {
   vendorName: string;
@@ -56,6 +68,7 @@ export default function ProductCard({
       }
     }
     setIsLoading(false);
+    window.location.reload()
   };
 
   return (
@@ -107,23 +120,46 @@ export default function ProductCard({
             <Button>View Details</Button>
           </Link>
 
-          <Button
-            onClick={() => {
-              removeProduct();
-            }}
-            disabled={isLoading}
-            className={`${
-              isLoading
-                ? "dark:bg-slate-700 bg-slate-700"
-                : "dark:bg-red-700 bg-red-600 hover:bg-red-500"
-            }`}
-          >
-            {isLoading ? (
-              <LoaderCircle className="animate-spin size-5 dark:invert" />
-            ) : (
-              <Trash2 className="size-5 dark:invert" />
-            )}
-          </Button>
+          {/* Alert dialog */}
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button className="dark:bg-red-700 bg-red-600 hover:bg-red-500">
+                {isLoading ? (
+                  <LoaderCircle className="animate-spin size-5 dark:invert" />
+                ) : (
+                  <Trash2 className="size-5 dark:invert" />
+                )}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Remove Product?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  You can re-add your product anytime by clicking on Add Product
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    removeProduct();
+                  }}
+                  disabled={isLoading}
+                  className={`${
+                    isLoading
+                      ? "dark:bg-slate-700 bg-slate-700"
+                      : "dark:bg-red-700 bg-red-600 hover:bg-red-500 dark:text-white"
+                  }`}
+                >
+                  {isLoading ? (
+                    <LoaderCircle className="animate-spin size-5 dark:invert" />
+                  ) : (
+                    "Remove"
+                  )}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
     </>
