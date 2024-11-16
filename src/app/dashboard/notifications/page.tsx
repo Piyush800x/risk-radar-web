@@ -7,19 +7,24 @@ interface Notification {
   id: string;
   header: string;
   time: string;
-}
-
-interface Products {
   vendorName: string;
   productName: string;
   productVersion: string;
+  high: string;
+  critical: string;
 }
+
+// interface Products {
+//   vendorName: string;
+//   productName: string;
+//   productVersion: string;
+// }
 
 export default function Notifications() {
   const { isAuthenticated, user } = useKindeBrowserClient();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [products, setProducts] = useState<Products[]>([]);
+  // const [products, setProducts] = useState<Products[]>([]);
 
   const getNotifications = async () => {
     setLoading(true);
@@ -35,7 +40,7 @@ export default function Notifications() {
       const res = await req.json();
       if (res.success) {
         setNotifications(res.data.notifications);
-        setProducts(res.data.products);
+        // setProducts(res.data.products);
         console.log(JSON.stringify(res.data.notifications));
       }
     } catch (error) {
@@ -73,20 +78,24 @@ export default function Notifications() {
       </div>
 
       {/* Notification bars */}
-      <div className="m-2 grid grid-cols-1 gap-2 w-full">
+      {!notifications ? (
+        <div>No notifications</div>
+      ) : (
+        <div className="m-2 grid grid-cols-1 gap-2 w-full">
         {notifications.map((notification, index) => (
           <NotificationCard
             title={notification.header}
             time={notification.time}
             id={notification.id}
             authId={user?.id ? user.id : ""}
-            vendorName={products[index].vendorName}
-            productName={products[index].productName}
-            productVersion={products[index].productVersion}
+            vendorName={notification.vendorName}
+            productName={notification.productName}
+            productVersion={notification.productVersion}
             key={user?.id}
           />
         ))}
       </div>
+      )}
     </div>
   );
 }
