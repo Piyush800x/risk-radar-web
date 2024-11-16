@@ -46,17 +46,17 @@ export default function LandingNavBar() {
 
       {/* Nav Links */}
       <div className="sm:flex hidden gap-8">
-        <Link href={"#"} className="relative group">
+        <Link href={"/"} className="relative group">
           <h1 className="after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-300 md:group-hover:after:w-full">
             Home
           </h1>
         </Link>
-        <Link href={"#"} className="relative group">
+        <Link href={"/#features"} className="relative group">
           <h1 className="after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-300 md:group-hover:after:w-full">
             Features
           </h1>
         </Link>
-        <Link href={"/pricing"} className="relative group">
+        <Link href={"/#pricing"} className="relative group">
           <h1 className="after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-300 md:group-hover:after:w-full">
             Pricing
           </h1>
@@ -146,12 +146,12 @@ export default function LandingNavBar() {
                       Home
                     </h1>
                   </Link>
-                  <Link href={"#"} className="relative group">
+                  <Link href={"/#features"} className="relative group">
                     <h1 className="after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-300 md:group-hover:after:w-full">
                       Features
                     </h1>
                   </Link>
-                  <Link href={"/pricing"} className="relative group">
+                  <Link href={"/#pricing"} className="relative group">
                     <h1 className="after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-300 md:group-hover:after:w-full">
                       Pricing
                     </h1>

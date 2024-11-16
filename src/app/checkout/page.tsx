@@ -6,6 +6,7 @@ import SubscribeButton from "@/components/Stripe/SubscribeButton";
 import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Pricing {
   planType: string;
@@ -32,7 +33,11 @@ export default function CheckoutPage() {
   }, [isAuthenticated]);
 
   if (!pricing) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full h-dvh flex justify-center items-center">
+        <Skeleton className="h-[520px] w-[800px]"/>
+      </div>
+    )
   }
 
   return (

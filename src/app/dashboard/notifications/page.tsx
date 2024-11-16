@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import NotificationCard from "@/components/NotificationCard";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Notification {
   id: string;
@@ -57,7 +58,22 @@ export default function Notifications() {
   }, [isAuthenticated, user]);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="py-4 px-5 w-full flex flex-col justify-center">
+        {/* Titles and stuffs */}
+        <h1 className="text-neutral-600 text-lg font-semibold dark:invert">
+          Notifications
+        </h1>
+        <div className="mt-6 flex flex-col text-neutral-900 text-3xl">
+          <Skeleton className="dark:text-white font-semibold h-16 w-1/3"></Skeleton>
+        </div>
+        <div className="m-2 grid grid-cols-1 gap-2 w-full">
+          {[...Array(5)].map((_, index) => (
+            <Skeleton key={index} className="h-16 w-full" />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -67,7 +83,9 @@ export default function Notifications() {
         Notifications
       </h1>
       <div className="mt-6 flex flex-col text-neutral-900 text-3xl">
-        <span className="dark:text-white font-semibold">Welcome, {user?.given_name}</span>
+        <span className="dark:text-white font-semibold">
+          Welcome, {user?.given_name}
+        </span>
         <span className="text-neutral-700 text-lg font-medium tracking-wide dark:invert">
           See all your notifications here
         </span>
@@ -78,19 +96,19 @@ export default function Notifications() {
         <div>No notifications</div>
       ) : (
         <div className="m-2 grid grid-cols-1 gap-2 w-full">
-        {notifications.map((notification, index) => (
-          <NotificationCard
-            title={notification.header}
-            time={notification.time}
-            id={notification.id}
-            authId={user?.id ? user.id : ""}
-            vendorName={notification.vendorName}
-            productName={notification.productName}
-            productVersion={notification.productVersion}
-            key={user?.id}
-          />
-        ))}
-      </div>
+          {notifications.map((notification, index) => (
+            <NotificationCard
+              title={notification.header}
+              time={notification.time}
+              id={notification.id}
+              authId={user?.id ? user.id : ""}
+              vendorName={notification.vendorName}
+              productName={notification.productName}
+              productVersion={notification.productVersion}
+              key={user?.id}
+            />
+          ))}
+        </div>
       )}
     </div>
   );

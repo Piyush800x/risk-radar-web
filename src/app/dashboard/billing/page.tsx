@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import Stripe from "stripe";
 import Link from "next/link";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import {
   Drawer,
@@ -60,13 +61,12 @@ export default function Billing() {
 
   const getSubscriptioStatus = async (data: SubscriptionResponse) => {
     if (data?.status == "active") {
-      setSubsStatus(true)
-    }
-    else {
+      setSubsStatus(true);
+    } else {
       setSubsStatus(false);
     }
   };
-  
+
   const fetchSubscriptionData = async () => {
     console.log(loading);
     setLoading(true);
@@ -85,7 +85,7 @@ export default function Billing() {
         setPlanDesc(data.desc);
         setInvoiceURL(data.invoiceURL);
         // setSubscriptionId(data.response.items[0].subscription)
-        setCardBrand(data.response.billingMethod.brand)
+        setCardBrand(data.response.billingMethod.brand);
         getSubscriptioStatus(data.response);
       } else {
         console.error("Failed to fetch subscription details");
@@ -165,7 +165,28 @@ export default function Billing() {
   }, [isAuthenticated]);
 
   if (!subscriptionData) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="py-4 px-5 w-full flex flex-col justify-center">
+        {/* Titles and stuffs */}
+        <h1 className="text-neutral-600 text-lg font-semibold dark:invert">
+          Billing
+        </h1>
+        <div className="mt-6 flex flex-col text-neutral-900 text-3xl">
+          <Skeleton className="dark:text-white font-semibold h-16 w-1/3"></Skeleton>
+        </div>
+
+        {/* Main skeleton */}
+        <div className="m-2 grid grid-cols-1 gap-2 w-full mt-10">
+          <Skeleton className="h-14 w-full" />
+          <Skeleton className="h-14 mt-4" />
+          <Skeleton className="h-16 mt-9" />
+          <Skeleton className="h-16 w-1/6 mt-4" />
+          <div className="w-full flex justify-end">
+            <Skeleton className="h-12 mt-4 w-1/5" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // Mapping of card brands to logo image paths
@@ -201,9 +222,9 @@ export default function Billing() {
       {/* Heading text and tab info */}
       <div className="text-neutral-900 text-3xl font-semibold tracking-wide">
         <h1 className="text-neutral-600 text-lg font-semibold dark:invert">
-          Home
+          Billing
         </h1>
-        <div className="flex flex-col">
+        <div className="flex flex-col mt-8">
           <span className="dark:text-white">Welcome, {user?.given_name}</span>
           <span className="text-neutral-700 text-lg font-medium tracking-wide dark:invert">
             Manage your billings here
@@ -253,7 +274,7 @@ export default function Billing() {
                 Click on buy now to change your current plan to another one
               </DrawerDescription>
             </DrawerHeader>
-            <ChangePlan/>
+            <ChangePlan />
             <DrawerFooter>
               <DrawerClose>
                 <Button variant="outline">Cancel</Button>

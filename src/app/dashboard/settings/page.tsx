@@ -4,6 +4,7 @@ import Stripe from "stripe";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { toast } from "sonner";
 import EmailNotificationButton from "@/components/Settings/EmailNotificationButton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface CardDetails {
   brand: string;
@@ -60,7 +61,11 @@ export default function Settings() {
         console.log(JSON.stringify(data));
         setSubscriptionData(data.response);
         // setPlanType(data.planType);
-        setBtnState(data.planType == "Standard" || data.planType == "Premium" ? false : true)
+        setBtnState(
+          data.planType == "Standard" || data.planType == "Premium"
+            ? false
+            : true
+        );
         // setPlanDesc(data.desc);
         // getSubscriptioStatus(data.response);
         setEmailingStatus(data.emailingStatus);
@@ -81,7 +86,22 @@ export default function Settings() {
   }, [isAuthenticated]);
 
   if (!subscriptionData) {
-    return <div>Loading...</div>;
+    return (
+      <div className="py-4 px-5 w-full flex flex-col justify-center">
+        {/* Titles and stuffs */}
+        <h1 className="text-neutral-600 text-lg font-semibold dark:invert">
+          Settings
+        </h1>
+        <div className="mt-6 flex flex-col text-neutral-900 text-3xl">
+          <Skeleton className="dark:text-white font-semibold h-16 w-1/3"></Skeleton>
+        </div>
+        <div className="mt-4 grid grid-cols-1 gap-4 w-full">
+          {[...Array(5)].map((_, index) => (
+            <Skeleton key={index} className="h-10 w-full" />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (

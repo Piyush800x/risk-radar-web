@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark:invert-colors" suppressHydrationWarning>
+    <html lang="en" className="dark:invert-colors scroll-smooth dark:selection:bg-neutral-700 selection:bg-neutral-200 dark:selection:text-white" suppressHydrationWarning>
       <body className={`${poppins.className} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}

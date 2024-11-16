@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+img {
+  -webkit-user-drag: none; /* For Safari and Chrome */
+  user-drag: none;
+}
+
+
 @layer utilities {
   .invert-colors {
     filter: invert(1) hue-rotate(180deg);

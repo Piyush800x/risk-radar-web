@@ -25,7 +25,7 @@ export default function Hero() {
 
       {/* CTA buttons */}
       <div className="sm:mt-[70px] mt-[30px] flex sm:gap-5 gap-1 ">
-        <Link href={"/pricing"}>
+        <Link href={"/#pricing"}>
           <Button size={"lg"} className="font-semibold">
             See Plans
           </Button>
