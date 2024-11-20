@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 
 interface CVEData {
@@ -31,11 +32,13 @@ export default function Home() {
   const { isAuthenticated, user } = useKindeBrowserClient();
   const [products, setProducts] = useState<CVEData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [planType, setPlanType] = useState<string>('');
 
   useEffect(() => {
     if (isAuthenticated) {
       fetchData();
       console.log(JSON.stringify(products));
+      fetchSubscriptionData();
     }
   }, [isAuthenticated, user]);
 
@@ -60,12 +63,60 @@ export default function Home() {
         console.error(error);
       }
     }
-    setLoading(false);
+    // setLoading(false);
   };
+
+  const fetchSubscriptionData = async () => {
+    setLoading(true);
+    try {
+      const req = await fetch("/api/subscription/get-subscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ authId: user?.id }),
+      });
+      if (req.ok) {
+        const response = await req.json();
+        console.log(JSON.stringify(response));
+        console.log(response.planType);
+        setPlanType(response.planType);
+      }
+    }
+    catch (error) {
+      console.error(error)
+    }
+    finally {
+      setLoading(false);
+    }
+  }
 
   // Step 2: Toggle the visibility when the button is clicked
   const toggleComponent = () => {
-    setIsVisible(!isVisible);
+    // console.log(planType);
+    if (planType == "Premium") {
+      if (products.length == 100) {
+        toast.error("Maximum product limit reached in your plan!")
+      }
+      else {
+        setIsVisible(!isVisible);
+      }
+    }
+    else if (planType == "Standard") {
+      if (products.length == 50) {
+        toast.error("Maximum product limit reached in your plan!")
+      }
+      else {
+        setIsVisible(!isVisible);
+      }
+    }
+    else if (planType == "Basic") {
+      if (products.length == 25) {
+        toast.error("Maximum product limit reached in your plan!")
+      }
+      else {
+        setIsVisible(!isVisible);
+      }
+    }
+    // setIsVisible(!isVisible);
   };
 
 
@@ -168,18 +219,6 @@ export default function Home() {
             <div>No products found</div>
           )}
 
-          {/* <div className="m-3">
-            <ProductCard />
-          </div>
-          <div className="m-3">
-            <ProductCard />
-          </div>
-          <div className="m-3">
-            <ProductCard />
-          </div>
-          <div className="m-3">
-            <ProductCard />
-          </div> */}
         </div>
       </div>
     </div>

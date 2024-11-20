@@ -18,13 +18,27 @@ export async function POST(req: NextRequest) {
     if (session.payment_status === 'paid') {
       const {productName, desc} = session.metadata!;
       const invoice = await stripe.invoices.retrieve(session.invoice as string);
-    //   console.log(JSON.stringify(session.customer_email))
-    //   console.log(`..........${productName}`)
-      // Update MongoDB to activate the subscription
+      
+      let scanIntervalHour: number;
+      switch (productName) {
+        case "Premium":
+          scanIntervalHour = 6;
+          break;
+        case "Standard":
+          scanIntervalHour = 12;
+          break;
+        case "Basic":
+          scanIntervalHour = 24;
+          break;
+        default:
+          scanIntervalHour = 24;
+          break;
+      }
+
       await client.connect();
       await db.collection('userdata').updateOne(
         { authEmailId: session.customer_email },
-        { $set: {"subscription": { subscriptionStatus: 'active', subscriptionId: session.subscription, planType: productName, desc: desc, invoiceURL: invoice.hosted_invoice_url}} }, 
+        { $set: {"subscription": { subscriptionStatus: 'active', subscriptionId: session.subscription, planType: productName, desc: desc, invoiceURL: invoice.hosted_invoice_url}, "scanIntervalHour": scanIntervalHour} }, 
       );  
       
       const respData = {
