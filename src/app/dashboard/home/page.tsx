@@ -10,7 +10,6 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
-
 interface CVEData {
   _id: string;
   vendorName: string;
@@ -32,7 +31,7 @@ export default function Home() {
   const { isAuthenticated, user } = useKindeBrowserClient();
   const [products, setProducts] = useState<CVEData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [planType, setPlanType] = useState<string>('');
+  const [planType, setPlanType] = useState<string>("");
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -80,45 +79,36 @@ export default function Home() {
         console.log(response.planType);
         setPlanType(response.planType);
       }
-    }
-    catch (error) {
-      console.error(error)
-    }
-    finally {
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   // Step 2: Toggle the visibility when the button is clicked
   const toggleComponent = () => {
     // console.log(planType);
     if (planType == "Premium") {
       if (products.length == 100) {
-        toast.error("Maximum product limit reached in your plan!")
-      }
-      else {
+        toast.error("Maximum product limit reached in your plan!");
+      } else {
         setIsVisible(!isVisible);
       }
-    }
-    else if (planType == "Standard") {
+    } else if (planType == "Standard") {
       if (products.length == 50) {
-        toast.error("Maximum product limit reached in your plan!")
-      }
-      else {
+        toast.error("Maximum product limit reached in your plan!");
+      } else {
         setIsVisible(!isVisible);
       }
-    }
-    else if (planType == "Basic") {
+    } else if (planType == "Basic") {
       if (products.length == 25) {
-        toast.error("Maximum product limit reached in your plan!")
-      }
-      else {
+        toast.error("Maximum product limit reached in your plan!");
+      } else {
         setIsVisible(!isVisible);
       }
     }
-    // setIsVisible(!isVisible);
   };
-
 
   if (loading) {
     return (
@@ -216,9 +206,10 @@ export default function Home() {
               </div>
             ))
           ) : (
-            <div>No products found</div>
+            <div className="">
+              <h1>No products found</h1>
+            </div>
           )}
-
         </div>
       </div>
     </div>

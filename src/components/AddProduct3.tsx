@@ -153,6 +153,7 @@ export default function AddProduct3() {
     }
     console.log(`Products: ${JSON.stringify(productData)}`);
     setIsSubmitting(false);
+    window.location.reload()
   };
 
   return (
