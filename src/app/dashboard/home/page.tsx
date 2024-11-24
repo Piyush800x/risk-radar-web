@@ -30,8 +30,10 @@ export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const { isAuthenticated, user } = useKindeBrowserClient();
   const [products, setProducts] = useState<CVEData[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<CVEData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [planType, setPlanType] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -40,6 +42,19 @@ export default function Home() {
       fetchSubscriptionData();
     }
   }, [isAuthenticated, user]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      const filtered = products.filter(
+        (product) =>
+          product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.vendorName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredProducts(filtered);
+    }, 500); // Debounce delay
+  
+    return () => clearTimeout(handler); // Cleanup timeout
+  }, [searchQuery, products]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -58,6 +73,7 @@ export default function Home() {
 
         const res = await req.json();
         setProducts(res);
+        setFilteredProducts(res); // Initialize filtered products
       } catch (error) {
         console.error(error);
       }
@@ -170,6 +186,8 @@ export default function Home() {
             <Input
               placeholder="Search by product name"
               className="pl-10 dark:bg-[#2D2D2D] dark:text-white font-medium"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
@@ -192,8 +210,8 @@ export default function Home() {
             />
             <h1 className="text-lg font-medium">Add Product</h1>
           </div>
-          {products && products.length > 0 ? (
-            products.map((product: CVEData) => (
+          {filteredProducts && filteredProducts .length > 0 ? (
+            filteredProducts.map((product: CVEData) => (
               <div className="m-3" key={product._id.toString()}>
                 <ProductCard
                   vendorName={product.vendorName}
