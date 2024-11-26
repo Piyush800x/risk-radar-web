@@ -8,6 +8,7 @@ import Stripe from "stripe";
 import Link from "next/link";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LoaderCircle } from "lucide-react";
 
 import {
   Drawer,
@@ -21,6 +22,20 @@ import {
 } from "@/components/ui/drawer";
 
 import ChangePlan from "@/components/ChangePlan";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface CardDetails {
   brand: string;
@@ -130,6 +145,7 @@ export default function Billing() {
       toast.error("Can't cancel subscription\nTry again later");
     } finally {
       setLoading(false);
+      window.location.reload();
     }
   };
 
@@ -244,7 +260,7 @@ export default function Billing() {
                 className={`w-max h-8 px-4 py-1 ${
                   subscriptionData.status === "active"
                     ? "bg-green-500/5 dark:border-lime-950"
-                    : "bg-red-500/5 border-red-600"
+                    : "bg-red-500/5 border-red-500/20"
                 } rounded-3xl border  justify-center items-center gap-2.5 inline-flex`}
               >
                 <h1
@@ -267,14 +283,18 @@ export default function Billing() {
           <DrawerTrigger>
             <Button variant={"secondary"}>Change Plan</Button>
           </DrawerTrigger>
-          <DrawerContent>
+          <DrawerContent className="max-h-screen">
             <DrawerHeader className="flex flex-col items-center">
               <DrawerTitle>Select plan</DrawerTitle>
               <DrawerDescription>
                 Click on buy now to change your current plan to another one
               </DrawerDescription>
             </DrawerHeader>
-            <ChangePlan />
+            <ScrollArea className="w-full h-full overflow-auto sm:p-4">
+              <ChangePlan />
+              <ScrollBar orientation="vertical" />
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
             <DrawerFooter>
               <DrawerClose>
                 <Button variant="outline">Cancel</Button>
@@ -345,7 +365,7 @@ export default function Billing() {
       {/* {subscriptionData.status ? (<Button onClick={() => renewSubscription()}>Renew Membership</Button>) : (<Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button>) } */}
       {/* <Button onClick={() => handleSubscriptionCancel()}>Cancel Membership</Button> */}
       <div className="flex justify-end">
-        {subsStatus ? (
+        {/* {subsStatus ? (
           <Button
             className="text-red-500 dark:bg-red-900/20 bg-red-100"
             onClick={() => handleSubscriptionCancel()}
@@ -354,7 +374,53 @@ export default function Billing() {
           </Button>
         ) : (
           <div></div>
-        )}
+        )} */}
+
+        {/* Alert dialog */}
+        <AlertDialog>
+          <AlertDialogTrigger>
+            {subsStatus ? (
+              <Button className="text-red-500 hover:bg-red-200 dark:bg-red-900/20 bg-red-100">
+                {loading ? (
+                  <LoaderCircle className="animate-spin size-5 dark:invert" />
+                ) : (
+                  <h1>Cancel Membership</h1>
+                )}
+              </Button>
+            ) : (
+              <div></div>
+            )}
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Cancel Subscription?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to cancel your subscription? This action
+                cannot be undone, and you will no longer be billed.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Go Back</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  handleSubscriptionCancel();
+                }}
+                disabled={loading}
+                className={`${
+                  loading
+                    ? "dark:bg-slate-700 bg-slate-700"
+                    : "dark:bg-red-700 bg-red-600 hover:bg-red-500 dark:text-white"
+                }`}
+              >
+                {loading ? (
+                  <LoaderCircle className="animate-spin size-5" />
+                ) : (
+                  "Confirm"
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

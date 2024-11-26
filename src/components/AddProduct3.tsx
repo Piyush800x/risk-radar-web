@@ -146,14 +146,14 @@ export default function AddProduct3() {
     const result = await response.json();
     if (result.success) {
       // toast.success("Product added successfully.");
-      toast.success(result.message);   // For v2 api only
+      toast.success(result.message); // For v2 api only
     } else {
       // toast.error("Couldn't add product.\nPlaese try again!");
-      toast.error(result.message);    // For v2 api only
+      toast.error(result.message); // For v2 api only
     }
     console.log(`Products: ${JSON.stringify(productData)}`);
     setIsSubmitting(false);
-    window.location.reload()
+    window.location.reload();
   };
 
   return (
@@ -241,6 +241,23 @@ export default function AddProduct3() {
                     {version}
                   </option>
                 ))}
+              </select>
+            </div>
+          )}
+
+          {/* Version Dropdown with Search */}
+          {productName && (
+            <div>
+              <label htmlFor="version">Product type</label>
+              <select
+                id="version"
+                className="border p-2 w-full rounded-md"
+                onChange={(e) => setSelectedVersion(e.target.value)}
+              >
+                <option value="">Select Product type</option>
+                <option value="Application">Application</option>
+                <option value="Hardware">Hardware</option>
+                <option value="OS">OS</option>
               </select>
             </div>
           )}

@@ -10,6 +10,7 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
+
 interface CVEData {
   _id: string;
   vendorName: string;

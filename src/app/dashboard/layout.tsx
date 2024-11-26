@@ -6,7 +6,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Loader } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { toast } from "sonner";
 
 export default function DashboardLayout({
@@ -18,6 +18,21 @@ export default function DashboardLayout({
   const [loading, setLoading] = useState<boolean>(true);
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const router = useRouter();
+  const pathname = usePathname(); // Get the current route
+
+  // Map routes to tab titles
+  const pageTitles: Record<string, string> = {
+    "/dashboard/home": "Dashboard | Home",
+    "/dashboard/settings": "Dashboard | Settings",
+    "/dashboard/notifications": "Dashboard | Notifications",
+    "/dashboard/billing": "Dashboard | Billing",
+  };
+
+  useEffect(() => {
+    // Set the page title dynamically based on the route
+    const defaultTitle = "Dashboard";
+    document.title = pageTitles[pathname] || defaultTitle;
+  }, [pathname]); // Update title whenever the route changes
 
   // Check if the subscription is valid
   const checkVerification = (unixTimestamp: number) => {
@@ -47,7 +62,9 @@ export default function DashboardLayout({
         console.error("Failed to fetch subscription details");
       }
     } catch (error) {
-      toast.error("Unable to fetch subscription details. Please try again later.");
+      toast.error(
+        "Unable to fetch subscription details. Please try again later."
+      );
       console.error(error);
     } finally {
       setLoading(false);
@@ -67,7 +84,9 @@ export default function DashboardLayout({
   useEffect(() => {
     if (isAuthenticated && !loading) {
       if (!isVerified) {
-        toast.error("You must have a valid subscription to access the dashboard!");
+        toast.error(
+          "You must have a valid subscription to access the dashboard!"
+        );
         router.push("/"); // Redirect to root
       }
     }
