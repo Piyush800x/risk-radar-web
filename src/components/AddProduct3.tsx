@@ -14,8 +14,8 @@ interface VendorProductData {
 }
 
 export default function AddProduct3() {
-  const [vendorName, setVendorName] = useState("");
-  const [productName, setProductName] = useState("");
+  const [vendorName, setVendorName] = useState<string | null>(null);
+  const [productName, setProductName] = useState<string | null>(null);
   const [filteredVendors, setFilteredVendors] = useState<VendorProductData[]>(
     []
   );
@@ -23,7 +23,8 @@ export default function AddProduct3() {
   const [filteredProducts, setFilteredProducts] = useState<string[]>([]);
   const [versions, setVersions] = useState<string[]>([]);
   const [filteredVersions, setFilteredVersions] = useState<string[]>([]);
-  const [selectedVersion, setSelectedVersion] = useState<string>("");
+  const [selectedVersion, setSelectedVersion] = useState<string | null>(null);
+  const [selectedProductType, setSelectedProductType] = useState<string | null>(null);
 
   const [vendorSearch, setVendorSearch] = useState("");
   const [productSearch, setProductSearch] = useState("");
@@ -124,6 +125,13 @@ export default function AddProduct3() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
+    if (vendorName == null || productName == null || selectedVersion == null || selectedProductType == null) {
+      toast.error("Please enter all values!")
+      setIsSubmitting(false);
+      return
+    }
+    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
     const productData = {
       authId: user?.id,
       authEmailId: user?.email,
@@ -132,10 +140,54 @@ export default function AddProduct3() {
       vendorName,
       productName,
       selectedVersion,
+      selectedProductType
     };
 
     // Add Products
     const response = await fetch("/api/add-product-v2", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(productData),
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      // toast.success("Product added successfully.");
+      toast.success(result.message); // For v2 api only
+    } else {
+      // toast.error("Couldn't add product.\nPlaese try again!");
+      toast.error(result.message); // For v2 api only
+    }
+    console.log(`Products: ${JSON.stringify(productData)}`);
+    setIsSubmitting(false);
+    window.location.reload();
+  };
+
+  // Add product v3 call
+  const handleSubmitV3 = async () => {
+    setIsSubmitting(true);
+    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
+    if (vendorName == null || productName == null || selectedVersion == null || selectedProductType == null) {
+      toast.error("Please enter all values!")
+      setIsSubmitting(false);
+      return
+    }
+    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
+    const productData = {
+      authId: user?.id,
+      authEmailId: user?.email,
+      userFirstName: user?.given_name,
+      userLastName: user?.family_name,
+      vendorName,
+      productName,
+      selectedVersion,
+      selectedProductType
+    };
+
+    // Add Products
+    const response = await fetch("/api/add-product-v3", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -172,7 +224,7 @@ export default function AddProduct3() {
             />
             <select
               id="vendorName"
-              value={vendorName}
+              value={vendorName!}
               onChange={(e) => setVendorName(e.target.value)}
               className="border p-2 w-full rounded-md"
             >
@@ -204,7 +256,7 @@ export default function AddProduct3() {
               />
               <select
                 id="productName"
-                value={productName}
+                value={productName!}
                 onChange={(e) => setProductName(e.target.value)}
                 className="border p-2 w-full rounded-md"
               >
@@ -245,14 +297,14 @@ export default function AddProduct3() {
             </div>
           )}
 
-          {/* Version Dropdown with Search */}
+          {/* Product Type Dropdown */}
           {productName && (
             <div>
               <label htmlFor="version">Product type</label>
               <select
                 id="version"
                 className="border p-2 w-full rounded-md"
-                onChange={(e) => setSelectedVersion(e.target.value)}
+                onChange={(e) => setSelectedProductType(e.target.value)}
               >
                 <option value="">Select Product type</option>
                 <option value="Application">Application</option>
@@ -262,7 +314,7 @@ export default function AddProduct3() {
             </div>
           )}
 
-          <Button className="" onClick={handleSubmit} disabled={isSubmitting}>
+          <Button className="" onClick={handleSubmitV3} disabled={isSubmitting}>
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

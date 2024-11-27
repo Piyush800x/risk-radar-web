@@ -7,7 +7,8 @@ const FLASK_API_ENDPOINT = process.env.FLASK_API_ENDPOINT
 interface Products {
     vendorName: string;
     productName: string,
-    productVersion: string
+    productVersion: string;
+    productType: string;
 }
 
 interface UserData {
@@ -31,10 +32,11 @@ export async function POST(req: NextRequest) {
         const productData: Products = {
             vendorName: data.vendorName,
             productName: data.productName,
-            productVersion: data.selectedVersion
+            productVersion: data.selectedVersion,
+            productType: data.selectedProductType
         }
-        console.log(`userDetails: ${JSON.stringify(userDetails)}`);
-
+        console.log(`userDetails: ${JSON.stringify(productData)}`);
+        console.log(`ProductData: ${JSON.stringify(productData)}`);
         // To check if any users exists else create one
         const checkUserUrl = new URL('/api/check-user', NEXT_PUBLIC_API_BASE_URL);
         const response = await fetch(checkUserUrl.toString(), {
@@ -55,13 +57,13 @@ export async function POST(req: NextRequest) {
             }
 
             // Calling Flask API First
-            const req = await fetch(`${FLASK_API_ENDPOINT}api/add-products`, {
+            const req = await fetch(`${FLASK_API_ENDPOINT}api/add-products-v2`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(productData)
-            })
+            });
 
             const resp = await req.json();
             console.log(`RESP: ${JSON.stringify(resp["success"])}`)
@@ -84,6 +86,9 @@ export async function POST(req: NextRequest) {
                 else {
                     return NextResponse.json({success: false, message: "Couldn't add product.\nPlaese try again!"});
                 }
+            }
+            else {
+                return NextResponse.json({success: false, message: "Something went wrong!.\nPlaese try again!"});
             }
         }
     }
