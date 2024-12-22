@@ -24,7 +24,9 @@ export default function AddProduct3() {
   const [versions, setVersions] = useState<string[]>([]);
   const [filteredVersions, setFilteredVersions] = useState<string[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<string | null>(null);
-  const [selectedProductType, setSelectedProductType] = useState<string | null>(null);
+  const [selectedProductType, setSelectedProductType] = useState<string | null>(
+    null
+  );
 
   const [vendorSearch, setVendorSearch] = useState("");
   const [productSearch, setProductSearch] = useState("");
@@ -82,6 +84,14 @@ export default function AddProduct3() {
           setProducts(productList);
           setFilteredProducts(productList); // Initialize filtered products
         });
+    } else {
+      setProductName(null);
+      setSelectedVersion(null);
+      setSelectedProductType(null);
+      setProducts([]);
+      setFilteredProducts([]);
+      setVersions([]);
+      setFilteredVersions([]);
     }
   }, [vendorName]);
 
@@ -117,7 +127,7 @@ export default function AddProduct3() {
   // Handle version search
   useEffect(() => {
     setFilteredVersions(
-      versions.filter((version) =>
+      (versions || []).filter((version) =>
         version.toLowerCase().includes(versionSearch.toLowerCase())
       )
     );
@@ -125,13 +135,22 @@ export default function AddProduct3() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
-    if (vendorName == null || productName == null || selectedVersion == null || selectedProductType == null) {
-      toast.error("Please enter all values!")
+    console.log(
+      `${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`
+    );
+    if (
+      vendorName == null ||
+      productName == null ||
+      selectedVersion == null ||
+      selectedProductType == null
+    ) {
+      toast.error("Please enter all values!");
       setIsSubmitting(false);
-      return
+      return;
     }
-    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
+    console.log(
+      `${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`
+    );
     const productData = {
       authId: user?.id,
       authEmailId: user?.email,
@@ -140,7 +159,7 @@ export default function AddProduct3() {
       vendorName,
       productName,
       selectedVersion,
-      selectedProductType
+      selectedProductType,
     };
 
     // Add Products
@@ -168,13 +187,22 @@ export default function AddProduct3() {
   // Add product v3 call
   const handleSubmitV3 = async () => {
     setIsSubmitting(true);
-    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
-    if (vendorName == null || productName == null || selectedVersion == null || selectedProductType == null) {
-      toast.error("Please enter all values!")
+    console.log(
+      `${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`
+    );
+    if (
+      vendorName == null ||
+      productName == null ||
+      selectedVersion == null ||
+      selectedProductType == null
+    ) {
+      toast.error("Please enter all values!");
       setIsSubmitting(false);
-      return
+      return;
     }
-    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
+    console.log(
+      `${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`
+    );
     const productData = {
       authId: user?.id,
       authEmailId: user?.email,
@@ -183,7 +211,7 @@ export default function AddProduct3() {
       vendorName,
       productName,
       selectedVersion,
-      selectedProductType
+      selectedProductType,
     };
 
     // Add Products
@@ -288,7 +316,7 @@ export default function AddProduct3() {
                 onChange={(e) => setSelectedVersion(e.target.value)}
               >
                 <option value="">Select Version</option>
-                {filteredVersions.map((version, index) => (
+                {(filteredVersions || []).map((version, index) => (
                   <option key={index} value={version}>
                     {version}
                   </option>

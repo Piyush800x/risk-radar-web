@@ -11,6 +11,7 @@ import Footer from "./sections/Footer";
 import Faq from "./sections/Faq";
 import { Button } from "../ui/button";
 import { ChevronUp } from "lucide-react";
+import Info from "./sections/Info";
 
 export function LandingPage() {
   const { setTheme } = useTheme();
@@ -35,6 +36,9 @@ export function LandingPage() {
           {/* <NavBar /> */}
           <LandingNavBar />
           <Hero />
+          <div id="info">
+            <Info />
+          </div>
           <div id="features">
             <Features />
           </div>
