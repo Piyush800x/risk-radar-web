@@ -133,47 +133,47 @@ export default function AddProduct3() {
     );
   }, [versionSearch, versions]);
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
-    if (vendorName == null || productName == null || selectedVersion == null || selectedProductType == null) {
-      toast.error("Please enter all values!")
-      setIsSubmitting(false);
-      return
-    }
-    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
-    const productData = {
-      authId: user?.id,
-      authEmailId: user?.email,
-      userFirstName: user?.given_name,
-      userLastName: user?.family_name,
-      vendorName,
-      productName,
-      selectedVersion,
-      selectedProductType
-    };
-
-  //   // Add Products
-  //   const response = await fetch("/api/add-product-v2", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(productData),
-  //   });
-
-  //   const result = await response.json();
-  //   if (result.success) {
-  //     // toast.success("Product added successfully.");
-  //     toast.success(result.message); // For v2 api only
-  //   } else {
-  //     // toast.error("Couldn't add product.\nPlaese try again!");
-  //     toast.error(result.message); // For v2 api only
+  // const handleSubmit = async () => {
+  //   setIsSubmitting(true);
+  //   console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
+  //   if (vendorName == null || productName == null || selectedVersion == null || selectedProductType == null) {
+  //     toast.error("Please enter all values!")
+  //     setIsSubmitting(false);
+  //     return
   //   }
-  //   console.log(`Products: ${JSON.stringify(productData)}`);
-  //   setIsSubmitting(false);
-  //   window.location.reload();
-  // };
+  //   console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
+  //   const productData = {
+  //     authId: user?.id,
+  //     authEmailId: user?.email,
+  //     userFirstName: user?.given_name,
+  //     userLastName: user?.family_name,
+  //     vendorName,
+  //     productName,
+  //     selectedVersion,
+  //     selectedProductType
+  //   };
+
+  // //   // Add Products
+  // //   const response = await fetch("/api/add-product-v2", {
+  // //     method: "POST",
+  // //     headers: {
+  // //       "Content-Type": "application/json",
+  // //     },
+  // //     body: JSON.stringify(productData),
+  // //   });
+
+  // //   const result = await response.json();
+  // //   if (result.success) {
+  // //     // toast.success("Product added successfully.");
+  // //     toast.success(result.message); // For v2 api only
+  // //   } else {
+  // //     // toast.error("Couldn't add product.\nPlaese try again!");
+  // //     toast.error(result.message); // For v2 api only
+  // //   }
+  // //   console.log(`Products: ${JSON.stringify(productData)}`);
+  // //   setIsSubmitting(false);
+  // //   window.location.reload();
+  // // };
 
   // Add product v3 call
   const handleSubmitV3 = async () => {
