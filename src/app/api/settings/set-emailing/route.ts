@@ -15,6 +15,10 @@ export async function POST(req: NextRequest) {
             },
             body: JSON.stringify({authId: data.authId, status: data.status})
         });
+
+        if (request.status === 429) {
+            return NextResponse.json({status: 429});
+        }
     
         const res = await request.json();
     

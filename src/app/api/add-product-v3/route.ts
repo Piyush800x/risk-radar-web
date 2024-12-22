@@ -65,6 +65,14 @@ export async function POST(req: NextRequest) {
                 body: JSON.stringify(productData)
             });
 
+            if (req.status === 429) {
+                return NextResponse.json({success: false, message: "Too many requests! Please try again after a minute."}, {status: 429});
+            }
+
+            if (req.status === 500) {
+                return NextResponse.json({success: false, message: "Internal server error"}, {status: 500});
+            }
+
             const resp = await req.json();
             console.log(`RESP: ${JSON.stringify(resp["success"])}`)
 

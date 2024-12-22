@@ -123,58 +123,60 @@ export default function AddProduct3() {
     );
   }, [versionSearch, versions]);
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
-    if (vendorName == null || productName == null || selectedVersion == null || selectedProductType == null) {
-      toast.error("Please enter all values!")
-      setIsSubmitting(false);
-      return
-    }
-    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
-    const productData = {
-      authId: user?.id,
-      authEmailId: user?.email,
-      userFirstName: user?.given_name,
-      userLastName: user?.family_name,
-      vendorName,
-      productName,
-      selectedVersion,
-      selectedProductType
-    };
+  // const handleSubmit = async () => {
+  //   setIsSubmitting(true);
+  //   console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
+  //   if (vendorName == null || productName == null || selectedVersion == null || selectedProductType == null) {
+  //     toast.error("Please enter all values!")
+  //     setIsSubmitting(false);
+  //     return
+  //   }
+  //   console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
+  //   const productData = {
+  //     authId: user?.id,
+  //     authEmailId: user?.email,
+  //     userFirstName: user?.given_name,
+  //     userLastName: user?.family_name,
+  //     vendorName,
+  //     productName,
+  //     selectedVersion,
+  //     selectedProductType
+  //   };
 
-    // Add Products
-    const response = await fetch("/api/add-product-v2", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(productData),
-    });
+  //   // Add Products
+  //   const response = await fetch("/api/add-product-v2", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(productData),
+  //   });
 
-    const result = await response.json();
-    if (result.success) {
-      // toast.success("Product added successfully.");
-      toast.success(result.message); // For v2 api only
-    } else {
-      // toast.error("Couldn't add product.\nPlaese try again!");
-      toast.error(result.message); // For v2 api only
-    }
-    console.log(`Products: ${JSON.stringify(productData)}`);
-    setIsSubmitting(false);
-    window.location.reload();
-  };
+  //   const result = await response.json();
+  //   if (result.success) {
+  //     // toast.success("Product added successfully.");
+  //     toast.success(result.message); // For v2 api only
+  //   } else {
+  //     // toast.error("Couldn't add product.\nPlaese try again!");
+  //     toast.error(result.message); // For v2 api only
+  //   }
+  //   console.log(`Products: ${JSON.stringify(productData)}`);
+  //   setIsSubmitting(false);
+  //   window.location.reload();
+  // };
 
   // Add product v3 call
   const handleSubmitV3 = async () => {
     setIsSubmitting(true);
-    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
-    if (vendorName == null || productName == null || selectedVersion == null || selectedProductType == null) {
-      toast.error("Please enter all values!")
+  
+    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`);
+    
+    if (!vendorName || !productName || !selectedVersion || !selectedProductType) {
+      toast.error("Please enter all values!");
       setIsSubmitting(false);
-      return
+      return;
     }
-    console.log(`${vendorName}-${productName}-${selectedVersion}-${selectedProductType}`)
+  
     const productData = {
       authId: user?.id,
       authEmailId: user?.email,
@@ -183,29 +185,52 @@ export default function AddProduct3() {
       vendorName,
       productName,
       selectedVersion,
-      selectedProductType
+      selectedProductType,
     };
-
-    // Add Products
-    const response = await fetch("/api/add-product-v3", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(productData),
-    });
-
-    const result = await response.json();
-    if (result.success) {
-      // toast.success("Product added successfully.");
-      toast.success(result.message); // For v2 api only
-    } else {
-      // toast.error("Couldn't add product.\nPlaese try again!");
-      toast.error(result.message); // For v2 api only
+  
+    try {
+      // Add Products
+      const response = await fetch("/api/add-product-v3", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(productData),
+      });
+  
+      // Handle 429 Too Many Requests
+      if (response.status === 429) {
+        toast.error("Too many requests! Please wait a minute and try again.");
+        setIsSubmitting(false);
+        return; // Ensure no further code executes
+      }
+  
+      // Handle 500 Internal Server Error
+      if (response.status === 500) {
+        toast.error("Internal server error! Please try again later.");
+        setIsSubmitting(false);
+        return; // Ensure no further code executes
+      }
+  
+      // Parse JSON only for other valid status codes
+      const result = await response.json();
+  
+      if (result.success) {
+        toast.success(result.message); // Show success message
+        setIsSubmitting(false);
+        window.location.reload(); // Reload page
+      } else {
+        toast.error(result.message); // Show failure message
+        setIsSubmitting(false);
+      }
+  
+      console.log(`Products: ${JSON.stringify(productData)}`);
+    } catch (error) {
+      // Handle network or unexpected errors
+      console.error("An unexpected error occurred:", error);
+      toast.error("Something went wrong. Please try again later.");
+      setIsSubmitting(false);
     }
-    console.log(`Products: ${JSON.stringify(productData)}`);
-    setIsSubmitting(false);
-    window.location.reload();
   };
 
   return (

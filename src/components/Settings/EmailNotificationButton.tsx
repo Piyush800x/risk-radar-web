@@ -37,18 +37,26 @@ export default function EmailNotificationButton({
         body: JSON.stringify({ authId: authId, status: status }),
       });
 
-      const res = await req.json();
-      if (res.status == 200) {
-        if (status) {
-          setEmailingStatus(true);
-          toast.success(`Email notifications turned on!`);
-        } else {
-          setEmailingStatus(false);
-          toast.success(`Email notifications turned off!`);
-        }
-      } else {
-        toast.error("Can't set email notification!");
+      if (req.status === 429) {
+        toast.success(`Too many requests! Please try again after a minute.`);
+        return;
       }
+
+      if (req.status === 200) {
+        const res = await req.json();
+        if (res.status == 200) {
+          if (status) {
+            setEmailingStatus(true);
+            toast.success(`Email notifications turned on!`);
+          } else {
+            setEmailingStatus(false);
+            toast.success(`Email notifications turned off!`);
+          }
+        } else {
+          toast.error("Can't set email notification!");
+        }
+      }
+      
     } catch (error) {
       console.error(error);
     } finally {
