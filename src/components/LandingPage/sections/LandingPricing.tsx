@@ -92,6 +92,11 @@ export default function LandingPricing() {
 
   const handleSubmit = async (plan: Pricing) => {
     if (isAuthenticated) {
+      if (plan.planType == "Enterprise") {
+        window.open("https://cal.com/riskradar/", "_blank");
+        return;
+      };
+
       sessionStorage.setItem("selectedPlan", JSON.stringify(plan));
 
       router.push("/checkout");
