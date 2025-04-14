@@ -2,7 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Settings, BellRing, CreditCard } from "lucide-react";
+import {
+  Home,
+  Settings,
+  BellRing,
+  CreditCard,
+  ExternalLink,
+} from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 
 import {
@@ -142,33 +148,14 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         {/* System Status */}
-        <div className="w-full flex gap-2 items-center border-t pt-2 border-stone-300">
-          <div>
-            <Image
-              src={"/green_tick_icon.svg"}
-              height={30}
-              width={30}
-              alt="green tick icon"
-            />
-          </div>
-          <div className={`${state === "collapsed" ? "hidden" : ""}`}>
-            <h1 className="font-semibold text-sm">
-              Status: All Systems Operational
-            </h1>
+        <Link href={"https://status.riskradar.tech/"} target="_blank" className="">
+          <div className="w-full flex gap-2 items-center p-3 rounded-lg bg-[#252527] transition-all hover:bg-[#252527]/50">
+            <ExternalLink size={30} />
             <h1 className="text-xs">
-              Last Updated:{" "}
-              {new Date().toLocaleString("en-US", {
-                timeZone: "Asia/Kolkata",
-                month: "short",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              })}{" "}
-              IST
+              Click to see service status of Risk Radar
             </h1>
           </div>
-        </div>
+        </Link>
       </SidebarFooter>
     </Sidebar>
   );
