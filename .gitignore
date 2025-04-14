@@ -39,3 +39,6 @@ next-env.d.ts
 .env.production
 Dockerfile
 .gcloudignore
+
+Dockerfile
+RealDockerfile
