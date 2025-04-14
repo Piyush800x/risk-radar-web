@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+![Logo](https://raw.githubusercontent.com/Piyush800x/risk-radar-web/refs/heads/master/public/RR_banner.jpg)
 
-First, run the development server:
+[![Website](https://img.shields.io/badge/Visit-riskradar.tech-0A0A0A?style=for-the-badge&logo=googlechrome&logoColor=white)](https://riskradar.tech)
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+
+<div style="text-align:center;">An open-source cybersecurity tool that monitors products for vulnerabilities—collaborative, automated, and privacy-focused.</div>
+
+<br/>
+
+![Logo](https://raw.githubusercontent.com/Piyush800x/risk-radar-web/refs/heads/master/public/hero_image.png)
+
+## 🚀 Features
+
+- 🔍 Vulnerability Monitoring – Continuously scans the web for known vulnerabilities in added products.
+
+- 📦 Product Tracking – Add and manage multiple products to monitor for security issues.
+
+- 📬 Instant Alerts – Get email notifications when a vulnerability is detected (Standard & Premium plans).
+
+- ⚡ "Check Now" Button – Instantly trigger a manual check for vulnerabilities (Standard & Premium plans).
+
+- 📊 Dashboard Overview – See a clear summary of product statuses and risk levels.
+
+- ⏱ Automated Scans – Runs checks periodically based on your plan (hourly, 6hr, or daily).
+
+- 🛡 End-to-End Privacy – Product data and scans are securely handled.
+
+- 🧠 AI-Powered Insights – Uses AI to provide explanations and recommendations.
+
+- 🧩 Easy Integration – Simple interface to add, manage, and track product risks.
+
+- 🌐 Open Source – Transparent, community-driven, and customizable.
+
+
+## 🛠 Tech Stack
+
+**Frontend**: Next.js, TypeScript, Tailwind CSS
+
+**Backend**: Node.js, Express.js
+
+**Database**: MongoDB
+
+**Others**: OpenAI API, Cron Jobs, Email Service, JWT Auth
+
+
+## 🧪 Getting Started
+
+**Prerequisites**
+- Node.js
+- MongoDB
+- .env file with required keys (refer to ".env.example" file)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://github.com/Piyush800x/risk-radar-web/tree/master
+  cd risk-radar-web
+  npm install
+  npm run dev
+
 ```
+    
+## 🤝 Contributing
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Contributions are always welcome!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+See `contributing.md` for ways to get started.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Please adhere to this project's `code of conduct`.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## 📨 Feedback
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If you have any feedback, please reach out to us at riskradartech@gmail.com
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## 🪪 License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[MIT](https://choosealicense.com/licenses/mit/)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## 📬 Developers
+
+- [@PiyushPaul](https://github.com/Piyush800x/)
+- [@ShibamMitra](https://github.com/shibammitra24/)
+
